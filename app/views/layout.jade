@@ -1,0 +1,17 @@
+doctype 5
+html
+    head
+        meta(charset="utf8")
+        meta(name="viewport", content="width=device-width")
+        title #{title} | Headquarters
+        link(href="/foundation-4.3.1/css/normalize.css", rel="stylesheet")
+        link(href="/foundation-4.3.1/css/foundation.min.css", rel="stylesheet")
+        script(src="/foundation-4.3.1/js/vendor/custom.modernizr.js")
+    body
+        block content
+        script.
+            document.write('<script src=/foundation-4.3.1/js/vendor/' +
+            ('__proto__' in {} ? 'zepto' : 'jquery') +
+            '.js><\/script>')
+        script(src="/foundation-4.3.1/js/foundation.min.js")
+        script $(document).foundation();

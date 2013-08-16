@@ -1,0 +1,6 @@
+mixin alertBox(flashes, type)
+    if flashes.length
+        div(data-alert class="alert-box #{type}")
+            each flash in flashes
+                span #{flash}<br />
+            a.close(href="#") &times;

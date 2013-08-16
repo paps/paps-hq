@@ -1,0 +1,22 @@
+extend layout
+block content
+    include alertBox
+    .row
+        .small-6.small-centered.columns
+            h1 Headquarters
+            form(action="/login", method="post")
+                fieldset
+                    legend Login
+                    +alertBox(errors, "alert")
+                    +alertBox(infos, "success")
+                    .row
+                        .small-3.columns
+                            label.right.inline(for="login") Login
+                        .small-9.columns
+                            input#login(type="text", name="login", required)
+                    .row
+                        .small-3.columns
+                            label.right.inline(for="password") Password
+                        .small-9.columns
+                            input#password(type="password", name="password", required)
+                    button.tiny.right(type="submit") Go
