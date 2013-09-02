@@ -1,0 +1,22 @@
+.row {
+	max-width: 100%;
+}
+
+.moduleOverlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: 0.5;
+	top: 0px;
+	left: 0px;
+}
+
+.moduleAlert {
+	font-size: 70%;
+	color: #960032;
+	display: none;
+	border: 1px solid #960032;
+	padding: 3px;
+	margin: 3px;
+}

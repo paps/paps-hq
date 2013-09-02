@@ -1,0 +1,25 @@
+.small-12.large-4.columns
+    div
+        button.tiny#sessionAll All
+        | 
+        button.tiny#sessionDesktop Desktop
+        | 
+        button.tiny#sessionMobile Mobile
+        | 
+        button.tiny#sessionTablet Tablet
+        | 
+        button.tiny#sessionNone None
+    div
+        button.tiny.secondary#sessionRefresh Refresh
+        | 
+        a.button.tiny.secondary(href="logout") Exit
+        | 
+        a.button.tiny.secondary(href="logoutAll") Close all sessions
+    div
+        input#sessionAutoRefresh(type="checkbox")
+        | 
+        | Auto refresh
+    div
+        input#sessionSave(type="checkbox")
+        | 
+        | Save configuration

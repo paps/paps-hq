@@ -78,6 +78,7 @@ else
 require(__dirname + '/routes/login') app
 require(__dirname + '/routes/dashboard') app
 require(__dirname + '/routes/modules/bank') app
+require(__dirname + '/routes/modules/creditCard') app
 
 # start!
 app.listen config.port

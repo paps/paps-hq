@@ -6,12 +6,15 @@ html
         title #{title} | Headquarters
         link(href="/foundation-4.3.1/css/normalize.css", rel="stylesheet")
         link(href="/foundation-4.3.1/css/foundation.min.css", rel="stylesheet")
+        link(href="/jquery-ui-1.10.3/jquery-ui-1.10.3.css", rel="stylesheet")
+        link(href="/jquery-ui-timepicker-1.4/jquery-ui-timepicker-1.4.css", rel="stylesheet")
+        link(href="/css/style.css", rel="stylesheet")
         script(src="/foundation-4.3.1/js/vendor/custom.modernizr.js")
     body
         block content
-        script.
-            document.write('<script src=/foundation-4.3.1/js/vendor/' +
-            ('__proto__' in {} ? 'zepto' : 'jquery') +
-            '.js><\/script>')
+        script(src="/jquery-2.0.3/jquery-2.0.3.min.js")
+        script(src="/jquery-ui-1.10.3/jquery-ui-1.10.3.min.js")
+        script(src="/jquery-ui-timepicker-1.4/jquery-ui-timepicker-1.4.js")
         script(src="/foundation-4.3.1/js/foundation.min.js")
         script $(document).foundation();
+        script(src="/js/hq.js")

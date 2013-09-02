@@ -2,16 +2,16 @@ extend layout
 block content
     include alertBox
     .row
-        .small-6.small-centered.columns
+        .large-6.small-12.columns.large-centered
             h1 Headquarters
-            form(action="/login", method="post")
+            form(action="login", method="post")
                 fieldset
                     legend Login
                     +alertBox(errors, "alert")
                     +alertBox(infos, "success")
                     .row
                         .small-3.columns
-                            label.right.inline(for="login") Login
+                            label.right.inline(for="login") Username
                         .small-9.columns
                             input#login(type="text", name="login", required)
                     .row
