@@ -15,6 +15,7 @@
         "sqlite3": "2.1.x",
         "connect-flash": "0.1.x",
         "express-validator": "0.7.x",
-        "simple-errors": "0.0.x"
+        "simple-errors": "0.0.x",
+        "async": "0.2.x"
     }
 }

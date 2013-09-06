@@ -11,7 +11,7 @@ then
 
 		# javascript concatenation with cat
 		# order is important
-		cat bank.js creditCard.js > hq.js
+		cat config.js bank.js futureTransactions.js > hq.js
 
 		uglifyjs hq.js -cmvo hq.js
 		ls -l hq.js

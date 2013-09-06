@@ -78,8 +78,7 @@ else
 require(__dirname + '/routes/login') app
 require(__dirname + '/routes/dashboard') app
 require(__dirname + '/routes/modules/bank') app
-require(__dirname + '/routes/modules/creditCard') app
+require(__dirname + '/routes/modules/futureTransactions') app
 
 # start!
-app.listen config.port
-console.log 'listening on ' + config.port
+app.listen config.port, () -> console.log 'listening on ' + config.port

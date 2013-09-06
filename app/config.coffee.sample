@@ -7,3 +7,6 @@ module.exports =
 	login: 'paps'
 	password: 'bacon'
 	secret: '' # generate secret here
+
+	bank:
+		password: '' # generate password here

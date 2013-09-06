@@ -1,0 +1,34 @@
+.small-12.large-4.columns(style="position: relative;")
+    h6.subheader#futureTransactionsHeader(style="border-bottom: 1px solid #ccc;")
+        div(style="float: right;")
+            img#futureTransactionsRefresh(src="/img/arrow_refresh.png", alt="")
+        | Future transactions
+    div.hide#futureTransactionsContent(style="margin-bottom: 12px;")
+        pre.moduleAlert#futureTransactionsAlertBox
+        form#futureTransactionsForm(style="margin-bottom: 0px;")
+            .row
+                .small-3.columns
+                    label(for="futureTransactionsId") ID
+                    input#futureTransactionsId(type="text")
+                .small-4.columns
+                    label(for="futureTransactionsAmount") Amount
+                    input#futureTransactionsAmount(type="text", required)
+                .small-5.columns
+                    label(for="futureTransactionsDate") dd/mm/yyyy hh:mm
+                    input#futureTransactionsDate(type="text", required)
+            .row
+                .small-3.columns
+                    label.inline Tags
+                .small-9.columns#futureTransactionsTagContainer
+            .row
+                .small-3.columns
+                    label.inline(for="futureTransactionsDescription") Description
+                .small-5.columns
+                    input#futureTransactionsDescription(type="text")
+                .small-2.columns
+                    button.small#futureTransactionsOk(style="width: 100%;", type="submit") OK
+                .small-2.columns
+                    a.button.small#futureTransactionsDel(style="width: 100%;", href="#") Del
+        div(style="overflow: auto; height: 300px;")
+            table#futureTransactionsTable(style="width: 100%; border: none;")
+    div.moduleOverlay.hide#futureTransactionsOverlay
