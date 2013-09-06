@@ -86,7 +86,7 @@ class FutureTransactions
 				@error err
 				@overlay no
 
-		for tag in window.hq.futureTransactions.tags
+		for tag in window.hq.config.futureTransactions.tags
 			@dom.tags[tag] = $('<span>').addClass('secondary round label').text(tag).click(((tag) =>
 				() =>
 					if @dom.tags[tag].hasClass 'secondary' then @dom.tags[tag].removeClass 'secondary' else @dom.tags[tag].addClass 'secondary'

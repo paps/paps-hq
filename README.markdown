@@ -14,11 +14,14 @@ Prerequisites
 	$ cd app
 	$ npm install
 	$ cd ..
-	$ ./supervisor.sh
 
-SQLite database import/export
+Then, for development, use `./supervisor.sh` and `./coffee.sh`.
+
+SQLite database handling
 -----------------------------
 
-`app/db.sqlite` is ignored by git
+`app/db.sqlite` is the database used by the app. It is ignored by git.
+
+To export the schema:
 
 	$ echo .schema | sqlite3 app/db.sqlite
