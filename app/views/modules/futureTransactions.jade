@@ -1,8 +1,10 @@
 .small-12.large-4.columns(style="position: relative;")
-    h6.subheader#futureTransactionsHeader(style="border-bottom: 1px solid #ccc;")
-        div(style="float: right;")
+    h6.subheader.moduleHead#futureTransactionsHeader
+        .moduleIcon
+            img(src="/img/money.png", alt="")
+        .moduleButtons
             img#futureTransactionsRefresh(src="/img/arrow_refresh.png", alt="")
-        | Future transactions
+        | Transactions
     div.hide#futureTransactionsContent(style="margin-bottom: 12px;")
         pre.moduleAlert#futureTransactionsAlertBox
         form#futureTransactionsForm(style="margin-bottom: 0px;")

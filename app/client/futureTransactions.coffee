@@ -27,6 +27,7 @@ class FutureTransactions
 		@dom.date.datetimepicker
 			controlType: 'select'
 			dateFormat: 'dd/mm/yy'
+			timeFormat: 'HH:mm'
 
 		@dom.alertBox.click () =>
 			@dom.alertBox.hide()
@@ -113,6 +114,7 @@ class FutureTransactions
 						date = date.toDateString()
 						line.append $('<td>').append($('<span>').css('color', '#777').text date).append $('<span>').css('color', '#999').text ', ' + time
 						line.append $('<td>').text transaction.description
+						line.append $('<td>').append $('<img>').attr('src', '/img/pencil.png').attr('alt', '')
 						line.attr 'title', transaction.tags
 						line.click(((transaction) =>
 							() =>

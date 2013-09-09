@@ -1,4 +1,4 @@
 window.hq =
 	config:
 		futureTransactions:
-			tags: ['atm', 'supermarket', 'restaurant', 'fastfood', 'club', 'pharmacy']
+			tags: ['atm', 'supermarket', 'restaurant', 'fastfood', 'club', 'pharmacy', 'transport']
