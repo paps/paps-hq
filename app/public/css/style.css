@@ -10,6 +10,7 @@
 	opacity: 0.5;
 	top: 0px;
 	left: 0px;
+	display: none;
 }
 
 .moduleAlert {
@@ -23,6 +24,12 @@
 
 .moduleHead {
 	border-bottom: 1px solid #ccc;
+	cursor: pointer;
+}
+
+.moduleContent {
+	margin-bottom: 12px;
+	display: none;
 }
 
 .moduleButtons {

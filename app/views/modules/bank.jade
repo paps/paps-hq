@@ -1,9 +1,48 @@
-.small-12.large-4.columns
-    h6.subheader.moduleHead
+.small-12.large-4.columns(style="position: relative;")
+    h6.subheader.moduleHead#bankHeader
         .moduleIcon
             img(src="/img/money_euro.png", alt="")
         .moduleButtons
-            img#bankRefresh(src="/img/arrow_refresh.png", alt="")
+            img#bankRefresh(src="/img/arrow_refresh.png", alt="", title="refresh")
         | Bank
-    div.hide#bankContent(style="margin-bottom: 12px;")
-        | Ceci est un test !
+    .moduleContent#bankContent
+        pre.moduleAlert#bankAlertBox
+        .row
+            .small-9.columns
+                div#bankBalance(style="border: 2px dotted #FF976B; margin-left: 10px; margin-right: 10px; padding: 3px; font-weight: bold; font-size: 17px; text-align: center; color: rgb(255, 255, 255);")
+                    | Projection: &euro; 
+                    span#bankBalanceProjection
+                    | &nbsp;&nbsp;&nbsp;&nbsp;
+                    span(style="font-weight: normal; font-size: 11px;")
+                        | Current: &euro; 
+                        span#bankBalanceCurrent
+            .small-3.columns(style="text-align: right;")
+                a.button.small#bankMatchAll(href="#", style="margin-bottom: 4px;") Match all
+        form.hide#bankForm(style="margin: 5px; padding: 5px; border: 1px solid #ccc;")
+            select#bankSelect(style="margin-bottom: 2px;")
+            .row
+                .small-6.columns
+                    strong
+                        | ID 
+                    span#bankId
+                    strong
+                        | &nbsp;&nbsp;&nbsp;&nbsp;&euro; 
+                    span#bankAmount
+                .small-6.columns(style="text-align: right;")
+                    a.button.small#bankCancel(href="#", style="margin-bottom: 0px;") Cancel
+                    | 
+                    button.small(type="submit", style="margin-bottom: 0px;") OK
+        div.hide#bankInfo(style="margin: 5px; padding: 5px; border: 1px solid #ccc;")
+            table(style="width: 100%; border: none; margin-bottom: 2px;")
+                tr#bankInfoTr
+                    td(style="text-align: right;")
+                        span.label#bankInfoAmount
+                    td#bankInfoDate(style="color: #777; text-align: center;")
+                    td#bankInfoDescription
+            div(style="text-align: right;")
+                a.button.small#bankInfoCancel(href="#", style="margin-bottom: 0px;") Cancel
+                | 
+                a.button.small#bankInfoUnmatch(type="submit", style="margin-bottom: 0px;") Unmatch
+        div(style="overflow: auto; height: 300px;")
+            table#bankTable(style="width: 100%; border: none;")
+    .moduleOverlay#bankOverlay

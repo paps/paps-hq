@@ -10,33 +10,35 @@ module.exports = (app) ->
 				errors: if err then [err] else []
 				transactions: transactions
 
+	app.get '/modules/future-transactions/unmatched', (ensureLoggedIn '/'), (req, res) ->
+		FutureTransaction.getUnmatched (err, transactions) ->
+			res.json
+				errors: if err then [err] else []
+				transactions: transactions
+
 	app.post '/modules/future-transactions/transaction/add-or-edit', (ensureLoggedIn '/'), (req, res) ->
 		(req.assert 'amount', 'invalid amount').isDecimal()
 		(req.assert 'date', 'invalid date').isInt()
+		(req.assert 'doNotMatch', 'invalid DNM flag').isInt()
+		(req.assert 'tag', 'invalid tag').len 1, 100
 		(req.assert 'description', 'invalid description').len 0, 200
 		errors = req.validationErrors() or []
-		if typeof (req.param 'tags') isnt 'string'
-			errors.push 'no tags'
-		else
-			tags = (req.param 'tags').split ','
-			for tag in tags
-				if tag isnt tag.trim() or tag.length < 1 or tag.length > 50
-					errors.push 'invalid tag "' + tag + '"'
-					break
 		if errors.length
 			res.json errors: errors
 		else
 			id = parseInt (req.param 'id')
+			dnm = parseInt (req.param 'doNotMatch')
 			if id
 				FutureTransaction.update
 					id: id
 					amount: (req.param 'amount')
 					description: (req.param 'description')
 					date: (req.param 'date')
-					tags: (req.param 'tags'),
+					tag: (req.param 'tag')
+					doNotMatch: dnm,
 					(err) -> res.json errors: if err then [err] else []
 			else
-				FutureTransaction.insert (req.param 'amount'), (req.param 'description'), (req.param 'date'), (req.param 'tags'),
+				FutureTransaction.insert (req.param 'amount'), (req.param 'description'), (req.param 'date'), (req.param 'tag'), dnm,
 					(err) -> res.json errors: if err then [err] else []
 
 	app.post '/modules/future-transactions/transaction/del', (ensureLoggedIn '/'), (req, res) ->

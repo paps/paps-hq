@@ -3,9 +3,9 @@
         .moduleIcon
             img(src="/img/money.png", alt="")
         .moduleButtons
-            img#futureTransactionsRefresh(src="/img/arrow_refresh.png", alt="")
+            img#futureTransactionsRefresh(src="/img/arrow_refresh.png", alt="", title="refresh")
         | Transactions
-    div.hide#futureTransactionsContent(style="margin-bottom: 12px;")
+    .moduleContent#futureTransactionsContent(style="margin-bottom: 12px;")
         pre.moduleAlert#futureTransactionsAlertBox
         form#futureTransactionsForm(style="margin-bottom: 0px;")
             .row
@@ -16,21 +16,26 @@
                     label(for="futureTransactionsAmount") Amount
                     input#futureTransactionsAmount(type="text", required)
                 .small-5.columns
-                    label(for="futureTransactionsDate") dd/mm/yyyy hh:mm
-                    input#futureTransactionsDate(type="text", required)
+                    label(for="futureTransactionsDate", style="float: left;") dd/mm/yyyy
+                    label(for="futureTransactionsTime", style="float: right;") hhmm
+                    input#futureTransactionsDate(type="text", style="width: 50%; float: left;", required)
+                    input#futureTransactionsTime(type="text", style="width: 40%; float: right;", required)
             .row
-                .small-3.columns
-                    label.inline Tags
-                .small-9.columns#futureTransactionsTagContainer
+                .small-2.columns
+                    label.inline Tag
+                .small-8.columns#futureTransactionsTagContainer
+                .small-2.columns(title="do not match")
+                    label(for="futureTransactionsDnm") DNM
+                    input#futureTransactionsDnm(type="checkbox")
             .row
                 .small-3.columns
                     label.inline(for="futureTransactionsDescription") Description
                 .small-5.columns
                     input#futureTransactionsDescription(type="text")
                 .small-2.columns
-                    button.small#futureTransactionsOk(style="width: 100%;", type="submit") OK
+                    button.small(style="width: 100%;", type="submit") OK
                 .small-2.columns
                     a.button.small#futureTransactionsDel(style="width: 100%;", href="#") Del
         div(style="overflow: auto; height: 300px;")
             table#futureTransactionsTable(style="width: 100%; border: none;")
-    div.moduleOverlay.hide#futureTransactionsOverlay
+    .moduleOverlay#futureTransactionsOverlay

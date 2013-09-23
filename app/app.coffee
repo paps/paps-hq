@@ -49,7 +49,7 @@ app.use express.session
 	secret: config.secret
 	store: new FileSessionStore
 		path: __dirname + '/sessions'
-		maxAge: 1000 * 60 * 60 * 24 * 45
+		maxAge: 1000 * 60 * 60 * 24 * 45 # 45 days
 app.use passport.initialize()
 app.use passport.session()
 app.use expressValidator()
@@ -79,6 +79,7 @@ require(__dirname + '/routes/login') app
 require(__dirname + '/routes/dashboard') app
 require(__dirname + '/routes/modules/bank') app
 require(__dirname + '/routes/modules/futureTransactions') app
+require(__dirname + '/routes/modules/notifications') app
 
 # start!
 app.listen config.port, () -> console.log 'listening on ' + config.port

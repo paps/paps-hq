@@ -1,16 +1,16 @@
 module.exports = (db) ->
 
 	class FutureTransaction
-		constructor: (@id, @amount, @description, @date, @tags) ->
+		constructor: (@id, @amount, @description, @date, @tag, @transactionId, @doNotMatch) ->
 
-		@insert: (amount, description, date, tags, done) ->
-			db.query 'INSERT INTO future_transactions(amount, description, date, tags) VALUES(?, ?, ?, ?)',
-				[amount, description, date, tags],
+		@insert: (amount, description, date, tag, doNotMatch, done) ->
+			db.query 'INSERT INTO future_transactions(amount, description, date, tag, do_not_match) VALUES(?, ?, ?, ?, ?)',
+				[amount, description, date, tag, (if doNotMatch then 1 else null)],
 				(err) -> if err then done err.toString() else done null
 
 		@update: (futureTransaction, done) ->
-			db.query 'UPDATE future_transactions SET amount = ?, description = ?, date = ?, tags = ? WHERE id = ?',
-				[futureTransaction.amount, futureTransaction.description, futureTransaction.date, futureTransaction.tags, futureTransaction.id],
+			db.query 'UPDATE future_transactions SET amount = ?, description = ?, date = ?, tag = ?, do_not_match = ? WHERE id = ?',
+				[futureTransaction.amount, futureTransaction.description, futureTransaction.date, futureTransaction.tag, (if futureTransaction.doNotMatch then 1 else null), futureTransaction.id],
 				(err) -> if err then done err.toString() else done null
 
 		@delete: (futureTransaction, done) ->
@@ -18,28 +18,36 @@ module.exports = (db) ->
 				[(if (typeof futureTransaction) is 'object' then futureTransaction.id else futureTransaction)],
 				(err) -> if err then done err.toString() else done null
 
-		@setTransaction: (futureTransaction, transaction, done) ->
-			db.query 'UPDATE future_transactions SET transaction_id = ? WHERE id = ?',
-				[(if (typeof futureTransaction) is 'object' then futureTransaction.id else futureTransaction),
-				(if (typeof transaction) is 'object' then transaction.id else transaction)],
+		@setTransaction: (transaction, futureTransaction, done) ->
+			db.query 'UPDATE future_transactions SET transaction_id = ? WHERE id = ? AND do_not_match IS NULL',
+				[(if (typeof transaction) is 'object' then transaction.id else transaction),
+				(if (typeof futureTransaction) is 'object' then futureTransaction.id else futureTransaction)],
 				(err) -> if err then done err.toString() else done null
 
-		@getById: (id, done) ->
-			db.query 'SELECT id, amount, description, date, tags FROM future_transactions WHERE id = ?', [id],
-				(err, res) ->
-					if err
-						done err.toString()
-					else if res?.rowCount is 1
-						done null, new FutureTransaction res.rows[0].id, res.rows[0].amount, res.rows[0].description, res.rows[0].date, res.rows[0].tags
+		@unmatch: (transaction, done) ->
+			db.query 'UPDATE future_transactions SET transaction_id = NULL WHERE transaction_id = ?',
+				[(if (typeof transaction) is 'object' then transaction.id else transaction)],
+				(err) -> if err then done err.toString() else done null
 
-		@getLast: (done) ->
-			db.query 'SELECT id, amount, description, date, tags FROM future_transactions ORDER BY date DESC', [],
+		@getUnmatched: (done) ->
+			db.query 'SELECT id, amount, description, date, tag, transaction_id, do_not_match FROM future_transactions WHERE transaction_id IS NULL ORDER BY date DESC', [],
 				(err, res) ->
 					if err
 						done err.toString()
 					else
 						ret = []
 						for row in res.rows
-							ret.push new FutureTransaction row.id, row.amount, row.description, row.date, row.tags
+							ret.push new FutureTransaction row.id, row.amount, row.description, row.date, row.tag, row.transaction_id, row.do_not_match
+						done null, ret
+
+		@getLast: (done) ->
+			db.query 'SELECT id, amount, description, date, tag, transaction_id, do_not_match FROM future_transactions WHERE transaction_id IS NULL OR strftime(\'%s\', \'now\') - date <= 60 * 60 * 24 * 30 ORDER BY transaction_id IS NOT NULL, do_not_match IS NOT NULL DESC, date DESC', [],
+				(err, res) ->
+					if err
+						done err.toString()
+					else
+						ret = []
+						for row in res.rows
+							ret.push new FutureTransaction row.id, row.amount, row.description, row.date, row.tag, row.transaction_id, row.do_not_match
 						done null, ret
 

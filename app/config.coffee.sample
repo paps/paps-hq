@@ -5,8 +5,19 @@ module.exports =
 		dev: 'sqlite3://app/db.sqlite'
 		prod: 'sqlite3://app/db.sqlite'
 	login: 'paps'
-	password: 'bacon'
+	password: '' # generate password here
 	secret: '' # generate secret here
 
 	bank:
 		password: '' # generate password here
+
+	notifications:
+		readPassword: '' # generate password here
+		writePassword: '' # generate password here
+		pushover:
+			token: '' # put pushover app token here
+			user: '' # put pushover user key here
+			devices:
+				tablet: '' # the name of your tablet device at pushover
+				phone: '' # the name of your phone device at pushover
+				# populate with more devices as needed
