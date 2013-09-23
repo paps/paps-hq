@@ -98,6 +98,8 @@ class Bank
 									balance = 0
 									matched = data.transactions
 									@dom.table.empty()
+									header = $('<td>').css('text-align', 'center').attr 'colspan', 4
+									@dom.table.append $('<tr>').append header
 									for tr in unmatched
 										if tr.id is idToEdit then @editTransaction tr
 										line = $('<tr>').attr 'title', 'not matched (balance: ' + tr.balance + ')'
@@ -115,11 +117,14 @@ class Bank
 										if maxDate < tr.date
 											maxDate = tr.date
 											balance = tr.balance
+									nbConsideredMatched = 0
 									for tr in matched
 										if tr.id is idToEdit then @editTransaction tr
 										hoursOffset = 0
 										if tr.futureTransaction
 											hoursOffset = Math.round (Math.abs (tr.futureTransaction.date - tr.date) / 3600)
+										else
+											++nbConsideredMatched
 										title = (if tr.futureTransaction then (@getFutureTransactionText tr.futureTransaction) else 'considered matched') + ' (balance: ' + tr.balance + ')' + (if hoursOffset >= 70 then ' (' + hoursOffset + ' hours matching offset)' else '')
 										line = $('<tr>').attr 'title', title
 										label = $('<span>').addClass('label' + (if tr.futureTransaction then (if hoursOffset >= 70 then ' secondary' else '') else ' success')).text tr.amount
@@ -141,6 +146,7 @@ class Bank
 										', and subtracting ' + (@projectionSub * -1) + ' from ' + @projectionSubNb + ' transaction' + (if @projectionSubNb > 1 then 's' else '')
 									@dom.balance.attr 'title', projectionTitle
 									@dom.balanceProjection.text Math.round((balance + @projectionAdd + @projectionSub) * 100) / 100
+									header.text unmatched.length + ' unmatched, also showing ' + matched.length + ' matched (including ' + nbConsideredMatched + ' considered matched)'
 							else
 								@error 'malformed json reply while fetching matched transactions'
 						).fail((xhr, status, err) =>

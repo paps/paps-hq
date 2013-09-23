@@ -15,7 +15,7 @@ module.exports = (app) ->
 		if (req.param 'password') isnt app.config.notifications.readPassword
 			res.json errors: ['incorrect password']
 		else
-			Notification.getLast (err, notifications) ->
+			Notification.getLastUnread (err, notifications) ->
 				res.json
 					errors: if err then [err] else []
 					notifications: notifications

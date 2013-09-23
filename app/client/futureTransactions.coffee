@@ -116,14 +116,23 @@ class FutureTransactions
 					@error JSON.stringify data.errors
 				else
 					@dom.table.empty()
+					header = $('<td>').css('text-align', 'center').attr 'colspan', 4
+					@dom.table.append $('<tr>').append header
+					nbMatched = 0
+					nbUnmatched = 0
+					nbDnm = 0
 					for transaction in data.transactions
 						line = $ '<tr>'
 						line.attr 'title', (if transaction.transactionId is null then (if transaction.doNotMatch then 'do not match flag on' else 'unmatched') else 'matched') + ' | ' + transaction.tag
 						label = $('<span>').addClass('label').text transaction.amount
 						if transaction.doNotMatch
 							label.addClass 'success'
+							++nbDnm
 						else if transaction.transactionId is null
 							label.addClass 'alert'
+							++nbUnmatched
+						else
+							++nbMatched
 						line.append $('<td>').css('text-align', 'right').append label
 						date = new Date transaction.date * 1000
 						time = (if date.getHours() < 10 then '0' else '') + date.getHours() + ':' + (if date.getMinutes() < 10 then '0' else '') + date.getMinutes()
@@ -150,6 +159,7 @@ class FutureTransactions
 									@error 'This transaction has an unknown tag: ' + tag
 						)(transaction))
 						@dom.table.append line
+					header.text nbUnmatched + ' unmatched, ' + nbDnm + ' DNM, also showing ' + nbMatched + ' matched'
 			else
 				@error 'malformed json reply'
 		).fail((xhr, status, err) =>
