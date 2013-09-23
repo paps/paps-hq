@@ -72,7 +72,7 @@ class Bank
 		@projectionSub = 0
 		@projectionSubNb = 0
 
-	refresh: (idToEdit) ->
+	refresh: (idToEdit) =>
 		@dom.form.hide()
 		@dom.info.hide()
 		@getFutureTransactions () =>
@@ -159,7 +159,7 @@ class Bank
 				@error status + ': ' + err
 				@overlay no
 
-	editTransaction: (tr) ->
+	editTransaction: (tr) =>
 		if tr.futureTransaction
 			@dom.form.hide()
 			@dom.infoAmount.text tr.futureTransaction.amount
@@ -224,7 +224,7 @@ class Bank
 			@dom.form.show()
 			@dom.form.effect 'highlight'
 
-	getFutureTransactions: (done) ->
+	getFutureTransactions: (done) =>
 		@overlay yes
 		($.ajax '/modules/future-transactions/unmatched',
 			type: 'GET'
@@ -261,23 +261,23 @@ class Bank
 			@error status + ': ' + err
 			@overlay no
 
-	getFutureTransactionText: (ftr) ->
+	getFutureTransactionText: (ftr) =>
 		if ftr.description then d = ftr.description else d = '(no description)'
 		date = new Date ftr.date * 1000
 		return ftr.amount + ' | ' + date.toDateString() + ' | ' + ftr.tag + ' | ' + d
 
-	show: () ->
+	show: () =>
 		@dom.content.show()
 		if not @refreshed
 			@refreshed = yes
 			@refresh()
 
-	hide: () -> @dom.content.hide()
+	hide: () => @dom.content.hide()
 
-	isVisible: () -> @dom.content.is ':visible'
+	isVisible: () => @dom.content.is ':visible'
 
-	overlay: (show) -> if show then @dom.overlay.show() else @dom.overlay.hide()
+	overlay: (show) => if show then @dom.overlay.show() else @dom.overlay.hide()
 
-	error: (err) -> @dom.alertBox.text(err).show()
+	error: (err) => @dom.alertBox.text(err).show()
 
-$ -> window.bank = new Bank
+$ -> window.hq.bank = new Bank

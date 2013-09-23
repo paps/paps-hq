@@ -12,11 +12,16 @@ express.application.db = db.createPool config.db[config.env],
 	min: 1
 	max: 5
 express.application.config = config
+express.application.sessionStore = new FileSessionStore
+	path: __dirname + '/sessions'
+	maxAge: 1000 * 60 * 60 * 24 * 45 # 45 days
 
 app = express()
 
 app.set 'views', __dirname + '/views'
 app.set 'view engine', 'jade'
+
+app.enable 'trust proxy'
 
 # passport configuration
 passport.use new LocalStrategy
@@ -47,9 +52,7 @@ app.use express.methodOverride()
 app.use express.cookieParser()
 app.use express.session
 	secret: config.secret
-	store: new FileSessionStore
-		path: __dirname + '/sessions'
-		maxAge: 1000 * 60 * 60 * 24 * 45 # 45 days
+	store: app.sessionStore
 app.use passport.initialize()
 app.use passport.session()
 app.use expressValidator()
@@ -80,6 +83,7 @@ require(__dirname + '/routes/dashboard') app
 require(__dirname + '/routes/modules/bank') app
 require(__dirname + '/routes/modules/futureTransactions') app
 require(__dirname + '/routes/modules/notifications') app
+require(__dirname + '/routes/modules/session') app
 
 # start!
 app.listen config.port, () -> console.log 'listening on ' + config.port

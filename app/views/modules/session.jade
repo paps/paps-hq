@@ -9,15 +9,18 @@
         button.tiny#sessionTablet Tablet
         | 
         button.tiny#sessionNone None
+    pre.moduleAlert#sessionAlertBox
     div
         button.tiny.secondary#sessionRefresh Refresh
         | 
+        button.tiny.secondary#sessionSave Save
+        | 
         a.button.tiny.secondary(href="logout") Exit
         | 
-        a.button.tiny.secondary(href="logoutAll") Close all sessions
+        a.button.tiny.secondary(href="logout-all") Exit all
     div
         input#sessionAutoRefresh(type="checkbox")
         | 
-        | Auto refresh
+        label(for="sessionAutoRefresh", style="display: inline;") Auto refresh
         | 
-        button.tiny.secondary#sessionSave Save configuration
+        span#sessionRefreshCounter

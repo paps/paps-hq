@@ -1,4 +1,5 @@
 passport = require 'passport'
+ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn
 
 module.exports = (app) ->
 
@@ -18,7 +19,13 @@ module.exports = (app) ->
 		failureRedirect: '/'
 		failureFlash: true
 
-	app.get '/logout', (req, res) ->
+	app.get '/logout', (ensureLoggedIn '/'), (req, res) ->
 		req.logout()
 		req.flash 'info', 'you have logged out'
 		res.redirect '/'
+
+	app.get '/logout-all', (ensureLoggedIn '/'), (req, res) ->
+		req.logout()
+		req.flash 'info', 'you have logged out and all sessions were deleted'
+		res.redirect '/'
+		setTimeout (() -> app.sessionStore.clear()), 1000

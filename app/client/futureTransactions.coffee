@@ -17,6 +17,7 @@ class FutureTransactions
 			alertBox: $ '#futureTransactionsAlertBox'
 			table: $ '#futureTransactionsTable'
 			dnm: $ '#futureTransactionsDnm'
+			clearForm: $ '#futureTransactionsClearForm'
 
 		@refreshed = no
 		@dom.header.click () =>
@@ -30,6 +31,11 @@ class FutureTransactions
 
 		@dom.alertBox.click () =>
 			@dom.alertBox.hide()
+
+		@dom.clearForm.click (e) =>
+			@show()
+			@resetForm()
+			e.stopPropagation()
 
 		@dom.form.submit () =>
 			time = @dom.time.val()
@@ -105,7 +111,7 @@ class FutureTransactions
 			)(tag))
 			@dom.tagContainer.append @dom.tags[tag]
 
-	refresh: () ->
+	refresh: () =>
 		@overlay yes
 		($.ajax '/modules/future-transactions/transactions',
 			type: 'GET'
@@ -166,13 +172,13 @@ class FutureTransactions
 			@error status + ': ' + err
 		).always () => @overlay no
 
-	show: () ->
+	show: () =>
 		@dom.content.show()
 		if not @refreshed
 			@refreshed = yes
 			@refresh()
 
-	resetForm: () ->
+	resetForm: () =>
 		@dom.id.val ''
 		@dom.amount.val ''
 		@dom.description.val ''
@@ -181,16 +187,16 @@ class FutureTransactions
 		@dom.dnm.prop 'checked', 0
 		@deselectTags()
 
-	deselectTags: () ->
+	deselectTags: () =>
 		for tag, elem of @dom.tags
 			if not elem.hasClass 'secondary' then elem.addClass 'secondary'
 
-	hide: () -> @dom.content.hide()
+	hide: () => @dom.content.hide()
 
-	isVisible: () -> @dom.content.is ':visible'
+	isVisible: () => @dom.content.is ':visible'
 
-	overlay: (show) -> if show then @dom.overlay.show() else @dom.overlay.hide()
+	overlay: (show) => if show then @dom.overlay.show() else @dom.overlay.hide()
 
-	error: (err) -> @dom.alertBox.text(err).show()
+	error: (err) => @dom.alertBox.text(err).show()
 
 $ -> window.hq.futureTransactions = new FutureTransactions

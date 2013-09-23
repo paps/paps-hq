@@ -16,10 +16,9 @@ class Notifications
 			@show()
 			e.stopPropagation()
 
-		@dom.alertBox.click () =>
-			@dom.alertBox.hide()
+		@dom.alertBox.click () => @dom.alertBox.hide()
 
-	refresh: () ->
+	refresh: () =>
 		@overlay yes
 		($.ajax '/modules/notifications/notifications',
 			type: 'GET'
@@ -111,18 +110,18 @@ class Notifications
 			@error status + ': ' + err
 		).always () => @overlay no
 
-	show: () ->
+	show: () =>
 		@dom.content.show()
 		if not @refreshed
 			@refreshed = yes
 			@refresh()
 
-	hide: () -> @dom.content.hide()
+	hide: () => @dom.content.hide()
 
-	isVisible: () -> @dom.content.is ':visible'
+	isVisible: () => @dom.content.is ':visible'
 
-	overlay: (show) -> if show then @dom.overlay.show() else @dom.overlay.hide()
+	overlay: (show) => if show then @dom.overlay.show() else @dom.overlay.hide()
 
-	error: (err) -> @dom.alertBox.text(err).show()
+	error: (err) => @dom.alertBox.text(err).show()
 
 $ -> window.hq.notifications = new Notifications
