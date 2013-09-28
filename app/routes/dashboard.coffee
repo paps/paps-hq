@@ -4,4 +4,5 @@ module.exports = (app) ->
 
 	app.get '/dashboard', (ensureLoggedIn '/'), (req, res) ->
 		res.render 'dashboard',
-			title: 'Dashboard'
+			title: 'Dashboard',
+			loadJs: true

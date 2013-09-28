@@ -4,10 +4,10 @@ html
         meta(charset="utf8")
         meta(name="viewport", content="width=device-width")
         title #{title} | Headquarters
+        link(href="/img/flag_purple.png", rel="icon")
         link(href="/foundation-4.3.1/css/normalize.css", rel="stylesheet")
         link(href="/foundation-4.3.1/css/foundation.min.css", rel="stylesheet")
         link(href="/jquery-ui-1.10.3/jquery-ui-1.10.3.css", rel="stylesheet")
-        link(href="/jquery-ui-timepicker-1.4/jquery-ui-timepicker-1.4.css", rel="stylesheet")
         link(href="/css/style.css", rel="stylesheet")
         script(src="/foundation-4.3.1/js/vendor/custom.modernizr.js")
     body
@@ -16,4 +16,5 @@ html
         script(src="/jquery-ui-1.10.3/jquery-ui-1.10.3.min.js")
         script(src="/foundation-4.3.1/js/foundation.min.js")
         script $(document).foundation();
-        script(src="/js/hq.js")
+        if loadJs
+            script(src="/js/hq.js")

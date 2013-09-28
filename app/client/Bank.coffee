@@ -1,28 +1,11 @@
 class Bank
 	constructor: () ->
-		@dom =
-			header: $ '#bankHeader'
-			refresh: $ '#bankRefresh'
-			content: $ '#bankContent'
-			alertBox: $ '#bankAlertBox'
-			overlay: $ '#bankOverlay'
-			table: $ '#bankTable'
-			balance: $ '#bankBalance'
-			balanceProjection: $ '#bankBalanceProjection'
-			balanceCurrent: $ '#bankBalanceCurrent'
-			id: $ '#bankId'
-			amount: $ '#bankAmount'
-			select: $ '#bankSelect'
-			cancel: $ '#bankCancel'
-			form: $ '#bankForm'
-			matchAll: $ '#bankMatchAll'
-			info: $ '#bankInfo'
-			infoTr: $ '#bankInfoTr'
-			infoAmount: $ '#bankInfoAmount'
-			infoDate: $ '#bankInfoDate'
-			infoDescription: $ '#bankInfoDescription'
-			infoCancel: $ '#bankInfoCancel'
-			infoUnmatch: $ '#bankInfoUnmatch'
+		@dom = window.hq.utils.getDom 'bank',
+			['header', 'refresh', 'content', 'alertBox', 'overlay', 'table',
+			'balance', 'balanceProjection', 'balanceCurrent', 'id', 'amount',
+			'select', 'cancel', 'form', 'matchAll', 'info', 'infoTr',
+			'infoAmount', 'infoDate', 'infoDescription', 'infoCancel',
+			'infoUnmatch']
 
 		@refreshed = no
 		@dom.header.click () =>
@@ -105,8 +88,7 @@ class Bank
 										line = $('<tr>').attr 'title', 'not matched (balance: ' + tr.balance + ')'
 										label = $('<span>').addClass('label alert').text tr.amount
 										line.append $('<td>').css('text-align', 'right').append label
-										date = (new Date tr.date * 1000).toDateString()
-										line.append $('<td>').css('color', '#777').css('text-align', 'center').text(date)
+										line.append $('<td>').css('color', '#777').css('text-align', 'center').text window.hq.utils.dateToStr tr.date, no
 										line.append $('<td>').text tr.description
 										pencil = $('<img>').css('cursor', 'pointer').attr('src', '/img/pencil.png').attr('title', 'edit').attr 'alt', ''
 										pencil.click(((tr) =>
@@ -117,6 +99,8 @@ class Bank
 										if maxDate < tr.date
 											maxDate = tr.date
 											balance = tr.balance
+									if unmatched.length
+										@dom.table.append $('<tr>').append $('<td>').attr('colspan', 4).css('background-color', '#ccc').css('padding', '0px').css 'height', '7px'
 									nbConsideredMatched = 0
 									for tr in matched
 										if tr.id is idToEdit then @editTransaction tr
@@ -129,8 +113,7 @@ class Bank
 										line = $('<tr>').attr 'title', title
 										label = $('<span>').addClass('label' + (if tr.futureTransaction then (if hoursOffset >= 70 then ' secondary' else '') else ' success')).text tr.amount
 										line.append $('<td>').css('text-align', 'right').append label
-										date = (new Date tr.date * 1000).toDateString()
-										line.append $('<td>').css('color', '#777').css('text-align', 'center').text(date)
+										line.append $('<td>').css('color', '#777').css('text-align', 'center').text window.hq.utils.dateToStr tr.date, no
 										line.append $('<td>').text tr.description
 										pencil = $('<img>').css('cursor', 'pointer').attr('src', '/img/pencil.png').attr('title', 'edit').attr 'alt', ''
 										pencil.click(((tr) =>
@@ -142,7 +125,7 @@ class Bank
 											maxDate = tr.date
 											balance = tr.balance
 									@dom.balanceCurrent.text Math.round(balance * 100) / 100
-									projectionTitle = 'Adding ' + @projectionAdd + ' from ' + @projectionAddNb + ' transaction' + (if @projectionAddNb > 1 then 's' else '') +
+									projectionTitle = 'adding ' + @projectionAdd + ' from ' + @projectionAddNb + ' transaction' + (if @projectionAddNb > 1 then 's' else '') +
 										', and subtracting ' + (@projectionSub * -1) + ' from ' + @projectionSubNb + ' transaction' + (if @projectionSubNb > 1 then 's' else '')
 									@dom.balance.attr 'title', projectionTitle
 									@dom.balanceProjection.text Math.round((balance + @projectionAdd + @projectionSub) * 100) / 100
@@ -163,11 +146,8 @@ class Bank
 		if tr.futureTransaction
 			@dom.form.hide()
 			@dom.infoAmount.text tr.futureTransaction.amount
-			date = new Date tr.futureTransaction.date * 1000
-			time = (if date.getHours() < 10 then '0' else '') + date.getHours() + ':' + (if date.getMinutes() < 10 then '0' else '') + date.getMinutes()
-			date = date.toDateString()
 			@dom.infoTr.attr 'title', tr.futureTransaction.tag
-			@dom.infoDate.text date + ', ' + time
+			@dom.infoDate.text window.hq.utils.dateToStr tr.futureTransaction.date, yes
 			@dom.infoDescription.text (if tr.futureTransaction.description then tr.futureTransaction.description else '(no description)')
 			@dom.infoUnmatch.off('click').click () =>
 				@overlay yes
@@ -263,8 +243,7 @@ class Bank
 
 	getFutureTransactionText: (ftr) =>
 		if ftr.description then d = ftr.description else d = '(no description)'
-		date = new Date ftr.date * 1000
-		return ftr.amount + ' | ' + date.toDateString() + ' | ' + ftr.tag + ' | ' + d
+		return ftr.amount + ' | ' + (window.hq.utils.dateToStr ftr.date, yes) + ' | ' + ftr.tag + ' | ' + d
 
 	show: () =>
 		@dom.content.show()
@@ -278,6 +257,6 @@ class Bank
 
 	overlay: (show) => if show then @dom.overlay.show() else @dom.overlay.hide()
 
-	error: (err) => @dom.alertBox.text(err).show()
+	error: (err) => @dom.alertBox.text(err).show().effect 'highlight'
 
 $ -> window.hq.bank = new Bank

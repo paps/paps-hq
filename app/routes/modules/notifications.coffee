@@ -3,7 +3,7 @@ ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn
 module.exports = (app) ->
 
 	Notification = (require __dirname + '/../../models/Notification') app.db
-	NotificationManager = (require __dirname + '/../../NotificationManager') app
+	addNotification = (require __dirname + '/../../notificators/add') app
 
 	app.get '/modules/notifications/notifications', (ensureLoggedIn '/'), (req, res) ->
 		Notification.getLast (err, notifications) ->
@@ -48,5 +48,8 @@ module.exports = (app) ->
 			if errors.length
 				res.json errors: errors
 			else
-				NotificationManager.add (req.param 'type'), (req.param 'text'), (req.param 'r'), (req.param 'g'), (req.param 'b'), (req.param 'devices'),
-					(err) -> res.json errors: if err then [err] else []
+				addNotification (req.param 'type'), (req.param 'text'), (req.param 'r'), (req.param 'g'), (req.param 'b'), (req.param 'devices'),
+					(err, id) ->
+						res.json
+							errors: if err then [err] else []
+							id: id

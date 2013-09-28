@@ -7,6 +7,7 @@ module.exports =
 	login: 'paps'
 	password: '' # generate password here
 	secret: '' # generate secret here
+	notifyOnStart: yes
 
 	bank:
 		password: '' # generate password here
@@ -15,9 +16,16 @@ module.exports =
 		readPassword: '' # generate password here
 		writePassword: '' # generate password here
 		pushover:
-			token: '' # put pushover app token here
 			user: '' # put pushover user key here
+			token: '' # put pushover app token here
 			devices:
 				tablet: '' # the name of your tablet device at pushover
-				phone: '' # the name of your phone device at pushover
+				mobile: '' # the name of your phone device at pushover
 				# populate with more devices as needed
+		reddit:
+			enabled: no # enable reddit mail checking or not
+			user: ''
+			password: ''
+			startAfter: 60 * 60 # seconds before first mail check
+			checkInterval: 60 * 60 # seconds between each mail check
+			userAgent: 'headquarters mail checker bot 1'

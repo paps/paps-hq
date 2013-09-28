@@ -1,12 +1,7 @@
 class Notifications
 	constructor: () ->
-		@dom =
-			header: $ '#notificationsHeader'
-			refresh: $ '#notificationsRefresh'
-			content: $ '#notificationsContent'
-			overlay: $ '#notificationsOverlay'
-			alertBox: $ '#notificationsAlertBox'
-			table: $ '#notificationsTable'
+		@dom = window.hq.utils.getDom 'notifications',
+			['header', 'refresh', 'content', 'overlay', 'alertBox', 'table']
 
 		@refreshed = no
 		@dom.header.click () =>
@@ -37,7 +32,7 @@ class Notifications
 						if not n.read then ++nbUnread
 						if n.read and not gotReadNotif and nbUnread > 0
 							gotReadNotif = yes
-							@dom.table.append $('<tr>').append $('<td>').attr('colspan', 5).css('border-bottom', '6px dashed #ccc').css('padding', '0px').css 'height', '1px'
+							@dom.table.append $('<tr>').append $('<td>').attr('colspan', 5).css('background-color', '#ccc').css('padding', '0px').css 'height', '7px'
 						if window.hq.config.notifications.knownTypes[n.type]
 							title = n.type
 							icon = '/img/' + window.hq.config.notifications.knownTypes[n.type]
@@ -48,10 +43,7 @@ class Notifications
 						if n.read then line.css 'text-decoration', 'line-through'
 						label = $('<span>').addClass('label round').css('background-color', 'rgb(' + n.r + ',' + n.g + ',' + n.b + ')').html '&times;' + n.count
 						line.append $('<td>').append label
-						date = new Date n.date * 1000
-						time = (if date.getHours() < 10 then '0' else '') + date.getHours() + ':' + (if date.getMinutes() < 10 then '0' else '') + date.getMinutes()
-						date = date.toDateString()
-						line.append $('<td>').css('color', '#777').css('text-align', 'center').text date + ', ' + time
+						line.append $('<td>').css('color', '#777').css('text-align', 'center').text window.hq.utils.dateToStr n.date, yes
 						line.append $('<td>').css('text-align', 'right').append $('<img>').attr('alt', '').attr 'src', icon
 						line.append $('<td>').text n.text
 						imgChangeRead = $('<img>').attr('alt', '').attr('title', 'mark as ' + (if n.read then 'un' else '') + 'read').attr('src', '/img/' + (if n.read then 'arrow_undo' else 'tick') + '.png').css 'cursor', 'pointer'
@@ -84,7 +76,7 @@ class Notifications
 						header.text 'No unread notifications'
 					else
 						header.text nbUnread + ' unread notification' + (if nbUnread > 1 then 's' else '') + ' '
-						markAllAsRead = $('<button>').addClass('tiny').css('margin-bottom', '2px').text 'Mark all as read'
+						markAllAsRead = $('<button>').addClass('small').css('margin-bottom', '2px').text 'Mark all as read'
 						markAllAsRead.click () =>
 							@overlay yes
 							($.ajax '/modules/notifications/mark-all-as-read',
@@ -122,6 +114,6 @@ class Notifications
 
 	overlay: (show) => if show then @dom.overlay.show() else @dom.overlay.hide()
 
-	error: (err) => @dom.alertBox.text(err).show()
+	error: (err) => @dom.alertBox.text(err).show().effect 'highlight'
 
 $ -> window.hq.notifications = new Notifications

@@ -6,7 +6,7 @@ module.exports = (db) ->
 		@insert: (type, text, r, g, b, md5sum, done) ->
 			db.query 'INSERT INTO notifications(count, type, text, r, g, b, md5sum, date) VALUES(1, ?, ?, ?, ?, ?, ?, strftime(\'%s\',\'now\'))',
 				[type, text, r, g, b, md5sum],
-				(err) -> if err then done err.toString() else done null
+				(err, res) -> if err then done err.toString() else done null, res.lastInsertId
 
 		@getByMd5Sum: (md5sum, done) ->
 			db.query 'SELECT id, count, type, text, r, g, b, date, read, md5sum FROM notifications WHERE md5sum = ? AND read IS NULL ORDER BY date DESC',
@@ -20,9 +20,10 @@ module.exports = (db) ->
 						done null
 
 		@incrementCounter: (notification, done) ->
+			id = if (typeof notification) is 'object' then notification.id else notification
 			db.query 'UPDATE notifications SET count = count + 1, date = strftime(\'%s\',\'now\') WHERE id = ?',
-				[(if (typeof notification) is 'object' then notification.id else notification)],
-				(err) -> if err then done err.toString() else done null
+				[id],
+				(err) -> if err then done err.toString() else done null, id
 
 		@markAllAsRead: (done) ->
 			db.query 'UPDATE notifications SET read = 1 WHERE read IS NULL', [], (err) -> if err then done err.toString() else done null

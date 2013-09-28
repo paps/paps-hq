@@ -1,23 +1,10 @@
 class FutureTransactions
 	constructor: () ->
-		@dom =
-			header: $ '#futureTransactionsHeader'
-			refresh: $ '#futureTransactionsRefresh'
-			content: $ '#futureTransactionsContent'
-			amount: $ '#futureTransactionsAmount'
-			description: $ '#futureTransactionsDescription'
-			date: $ '#futureTransactionsDate'
-			time: $ '#futureTransactionsTime'
-			id: $ '#futureTransactionsId'
-			overlay: $ '#futureTransactionsOverlay'
-			form: $ '#futureTransactionsForm'
-			del: $ '#futureTransactionsDel'
-			tagContainer: $ '#futureTransactionsTagContainer'
-			tags: {}
-			alertBox: $ '#futureTransactionsAlertBox'
-			table: $ '#futureTransactionsTable'
-			dnm: $ '#futureTransactionsDnm'
-			clearForm: $ '#futureTransactionsClearForm'
+		@dom = window.hq.utils.getDom 'futureTransactions',
+			['header', 'refresh', 'content', 'amount', 'description', 'date',
+			'time', 'id', 'overlay', 'form', 'del', 'tagContainer', 'alertBox',
+			'table', 'dnm', 'clearForm']
+		@dom.tags = {}
 
 		@refreshed = no
 		@dom.header.click () =>
@@ -128,6 +115,8 @@ class FutureTransactions
 					nbUnmatched = 0
 					nbDnm = 0
 					for transaction in data.transactions
+						if transaction.transactionId isnt null and not transaction.doNotMatch and (nbDnm + nbUnmatched) > 0 and nbMatched is 0
+							@dom.table.append $('<tr>').append $('<td>').attr('colspan', 4).css('background-color', '#ccc').css('padding', '0px').css 'height', '7px'
 						line = $ '<tr>'
 						line.attr 'title', (if transaction.transactionId is null then (if transaction.doNotMatch then 'do not match flag on' else 'unmatched') else 'matched') + ' | ' + transaction.tag
 						label = $('<span>').addClass('label').text transaction.amount
@@ -140,10 +129,7 @@ class FutureTransactions
 						else
 							++nbMatched
 						line.append $('<td>').css('text-align', 'right').append label
-						date = new Date transaction.date * 1000
-						time = (if date.getHours() < 10 then '0' else '') + date.getHours() + ':' + (if date.getMinutes() < 10 then '0' else '') + date.getMinutes()
-						date = date.toDateString()
-						line.append $('<td>').css('color', '#777').css('text-align', 'center').text date + ', ' + time
+						line.append $('<td>').css('color', '#777').css('text-align', 'center').text window.hq.utils.dateToStr transaction.date, yes
 						line.append $('<td>').text transaction.description
 						pencil = $('<img>').css('cursor', 'pointer').attr('src', '/img/pencil.png').attr('title', 'edit').attr 'alt', ''
 						line.append $('<td>').append pencil
@@ -197,6 +183,6 @@ class FutureTransactions
 
 	overlay: (show) => if show then @dom.overlay.show() else @dom.overlay.hide()
 
-	error: (err) => @dom.alertBox.text(err).show()
+	error: (err) => @dom.alertBox.text(err).show().effect 'highlight'
 
 $ -> window.hq.futureTransactions = new FutureTransactions

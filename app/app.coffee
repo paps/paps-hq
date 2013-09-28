@@ -39,14 +39,11 @@ passport.deserializeUser (login, done) ->
 	done null,
 		login: login
 
-# unimportant stuff
-app.use express.favicon()
-app.use express.logger()
-
 # static files
 app.use express.static __dirname + '/public'
 
 # session & request handling
+app.use express.logger()
 app.use express.bodyParser()
 app.use express.methodOverride()
 app.use express.cookieParser()
@@ -78,12 +75,15 @@ else
 		res.render 'error'
 
 # route definitions
-require(__dirname + '/routes/login') app
-require(__dirname + '/routes/dashboard') app
-require(__dirname + '/routes/modules/bank') app
-require(__dirname + '/routes/modules/futureTransactions') app
-require(__dirname + '/routes/modules/notifications') app
-require(__dirname + '/routes/modules/session') app
+(require __dirname + '/routes/login') app
+(require __dirname + '/routes/dashboard') app
+(require __dirname + '/routes/modules/bank') app
+(require __dirname + '/routes/modules/futureTransactions') app
+(require __dirname + '/routes/modules/notifications') app
+(require __dirname + '/routes/modules/session') app
+
+# launch other stuff
+(require __dirname + '/init') app
 
 # start!
 app.listen config.port, () -> console.log 'listening on ' + config.port

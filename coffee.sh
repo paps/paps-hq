@@ -10,10 +10,11 @@ then
 		rm -f hq.js
 
 		# javascript concatenation with cat
-		# order is important :
+		# order is important:
 		#   config must be first
-		#   session must be last
-		cat config.js bank.js futureTransactions.js notifications.js session.js > hq.js
+		#   Utils must be second
+		#   Session must be last
+		cat config.js Utils.js Bank.js FutureTransactions.js Notifications.js Session.js > hq.js
 
 		uglifyjs hq.js -cmvo hq.js
 		ls -l hq.js

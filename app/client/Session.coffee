@@ -1,16 +1,8 @@
 class Session
 	constructor: () ->
-		@dom =
-			all: $ '#sessionAll'
-			desktop: $ '#sessionDesktop'
-			mobile: $ '#sessionMobile'
-			tablet: $ '#sessionTablet'
-			none: $ '#sessionNone'
-			refresh: $ '#sessionRefresh'
-			autoRefresh: $ '#sessionAutoRefresh'
-			refreshCounter: $ '#sessionRefreshCounter'
-			save: $ '#sessionSave'
-			alertBox: $ '#sessionAlertBox'
+		@dom = window.hq.utils.getDom 'session',
+			['all', 'desktop', 'mobile', 'tablet', 'none', 'refresh',
+			'autoRefresh', 'refreshCounter', 'save', 'alertBox']
 
 		@dom.alertBox.click () => @dom.alertBox.hide()
 
@@ -30,17 +22,26 @@ class Session
 
 		@timeBeforeRefresh = null
 
+		@activity = 0
+		$(document).mousemove () => ++@activity
+		$(document).keypress () => ++@activity
+
 		@dom.autoRefresh.click () => @setAutoRefresh @dom.autoRefresh.is ':checked'
 
 		setInterval (() =>
 			if @timeBeforeRefresh is null then return
-			if @timeBeforeRefresh <= 2
-				@refreshModules()
+			if @activity
 				@timeBeforeRefresh = window.hq.config.session.refreshInterval
-				@dom.refreshCounter.text '(just refreshed)'
+				@dom.refreshCounter.text '(paused)'
+				@activity = 0
 			else
-				@timeBeforeRefresh -= 10
-				@showRefreshCounter()
+				if @timeBeforeRefresh <= 2
+					@refreshModules()
+					@timeBeforeRefresh = window.hq.config.session.refreshInterval
+					@dom.refreshCounter.text '(just refreshed)'
+				else
+					@timeBeforeRefresh -= 10
+					@showRefreshCounter()
 			), 10000
 
 		($.ajax '/modules/session/my-configuration',
@@ -61,14 +62,14 @@ class Session
 							else
 								window.hq[m].hide()
 					else
-						@dom.autoRefresh.prop 'checked', 0
+						@setAutoRefresh no
 			else
 				@error 'malformed json reply while fetching configuration'
 		).fail (xhr, status, err) =>
 			@error status + ': ' + err
 
 		@dom.save.click () =>
-			@dom.save.hide()
+			@dom.save.prop('disabled', true).text 'Saving...'
 			modules = ''
 			for m in window.hq.config.session.modules.all
 				if window.hq[m].isVisible()
@@ -88,21 +89,27 @@ class Session
 					@error 'malformed json reply while saving configuration'
 			).fail((xhr, status, err) =>
 				@error status + ': ' + err
-			).always () => @dom.save.show 'slow'
+			).always () =>
+				setTimeout (() => @dom.save.prop('disabled', false).text 'Save'), 500
 
 	setAutoRefresh: (autoRefresh) =>
 		if autoRefresh
+			@dom.autoRefresh.prop 'checked', 1
 			@timeBeforeRefresh = window.hq.config.session.refreshInterval - 10
 			@showRefreshCounter()
 		else
+			@dom.autoRefresh.prop 'checked', 0
 			@timeBeforeRefresh = null
 			@dom.refreshCounter.text ''
 
-	showRefreshCounter: () => @dom.refreshCounter.text '(refreshing in ' + @timeBeforeRefresh + 's)'
+	showRefreshCounter: () => @dom.refreshCounter.text '(in ~' + @timeBeforeRefresh + 's)'
 
 	refreshModules: () =>
-		for m in window.hq.config.session.modules.all
-			if window.hq[m].isVisible() then window.hq[m].refresh()
+		if not @dom.refresh.prop 'disabled'
+			@dom.refresh.prop('disabled', true).text 'Refreshing...'
+			setTimeout (() => @dom.refresh.prop('disabled', false).text 'Refresh'), 3000
+			for m in window.hq.config.session.modules.all
+				if window.hq[m].isVisible() then window.hq[m].refresh()
 
 	showArrayOfModules: (name) =>
 		for m in window.hq.config.session.modules.all

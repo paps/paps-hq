@@ -15,7 +15,7 @@ module.exports = (app) ->
 				infos: req.flash 'info'
 
 	app.post '/login', passport.authenticate 'local',
-		successReturnToOrRedirect: '/dashboard'
+		successRedirect: '/dashboard'
 		failureRedirect: '/'
 		failureFlash: true
 

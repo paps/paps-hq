@@ -100,7 +100,7 @@ module.exports = (app) ->
 					matched: matched
 					unmatched: unmatched
 
-	NotificationManager = (require __dirname + '/../../NotificationManager') app
+	addNotification = (require __dirname + '/../../notificators/add') app
 
 	app.post '/modules/bank/add-transactions', (req, res) ->
 		if (req.param 'password') isnt app.config.bank.password
@@ -134,11 +134,11 @@ module.exports = (app) ->
 								done null
 			async.eachSeries transactions, iterator, (err) ->
 				if err
-					NotificationManager.add 'bank', 'When adding transactions: ' + err, 255, 100, 12, '*', (err) ->
+					addNotification 'bank', 'When adding transactions: ' + err, 255, 100, 12, '*', (err) ->
 				else
 					matchAll (err, nbMatched, nbUnmatched) ->
 						if err
-							NotificationManager.add 'bank', 'When matching transactions: ' + err, 255, 100, 12, '*', (err) ->
+							addNotification 'bank', 'When matching transactions: ' + err, 255, 100, 12, '*', (err) ->
 						else if nbMatched > 0 or nbAdded > 0
-							NotificationManager.add 'bank', nbAdded + ' transaction' + (if nbAdded > 1 then 's' else '') + ' added, ' + nbMatched + ' matched, ' + nbUnmatched + ' left unmatched', 50, 230, 12, '*', (err) ->
+							addNotification 'bank', nbAdded + ' transaction' + (if nbAdded > 1 then 's' else '') + ' added, ' + nbMatched + ' matched, ' + nbUnmatched + ' left unmatched', 50, 230, 12, '*', (err) ->
 				res.json errors: if err then [err] else []
