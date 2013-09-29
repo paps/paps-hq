@@ -2,7 +2,7 @@ window.hq =
 	config:
 		session:
 			modules:
-				all: ['notifications', 'bank', 'futureTransactions']
+				all: ['notifications', 'bank', 'futureTransactions', 'budget']
 				desktop: ['notifications', 'futureTransactions']
 				mobile: []
 				tablet: []

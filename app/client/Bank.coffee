@@ -89,7 +89,7 @@ class Bank
 										label = $('<span>').addClass('label alert').text tr.amount
 										line.append $('<td>').css('text-align', 'right').append label
 										line.append $('<td>').css('color', '#777').css('text-align', 'center').text window.hq.utils.dateToStr tr.date, no
-										line.append $('<td>').text tr.description
+										line.append $('<td>').text tr.description.toLowerCase()
 										pencil = $('<img>').css('cursor', 'pointer').attr('src', '/img/pencil.png').attr('title', 'edit').attr 'alt', ''
 										pencil.click(((tr) =>
 											() => @editTransaction tr
@@ -114,7 +114,7 @@ class Bank
 										label = $('<span>').addClass('label' + (if tr.futureTransaction then (if hoursOffset >= 70 then ' secondary' else '') else ' success')).text tr.amount
 										line.append $('<td>').css('text-align', 'right').append label
 										line.append $('<td>').css('color', '#777').css('text-align', 'center').text window.hq.utils.dateToStr tr.date, no
-										line.append $('<td>').text tr.description
+										line.append $('<td>').text tr.description.toLowerCase()
 										pencil = $('<img>').css('cursor', 'pointer').attr('src', '/img/pencil.png').attr('title', 'edit').attr 'alt', ''
 										pencil.click(((tr) =>
 											() => @editTransaction tr

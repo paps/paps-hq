@@ -3,8 +3,35 @@
         .moduleIcon
             img(src="/img/chart_bar.png", alt="")
         .moduleButtons
+            img#budgetAtm(src="/img/server_delete.png", alt="", title="distribute atm transactions (currently on)")
+            | 
             img#budgetRefresh(src="/img/arrow_refresh.png", alt="", title="refresh")
         | Budget
     .moduleContent#budgetContent
         pre.moduleAlert#budgetAlertBox
+        .row(style="margin-bottom: 0px;")
+            .small-5.columns(style="text-align: center;")
+                button.tiny#budgetPrev(style="margin-bottom: 2px;", title="previous month") &larr;
+                button.tiny.success#budgetPeriod1(style="margin-bottom: 2px;", title="one month period") 1
+                button.tiny#budgetPeriod3(style="margin-bottom: 2px;", title="three month period") 3
+                button.tiny#budgetPeriod6(style="margin-bottom: 2px;", title="six month period") 6
+                button.tiny#budgetNext(style="margin-bottom: 2px;", title="next month") &rarr;
+                div(style="font-size: small; font-weight: bold;")
+                    span#budgetPeriodStart
+                    |  &rarr; 
+                    span#budgetPeriodEnd
+            .small-3.columns(style="font-family: Monospace;")
+                img(src="/img/money.png", alt="", title="income")
+                | &nbsp;+
+                span#budgetIncome
+                | <br />
+                img(src="/img/cart.png", alt="", title="spending")
+                | &nbsp;-
+                span#budgetSpending
+                | <br />
+                img(src="/img/bullet_go.png", alt="", title="profit")
+                | &nbsp;
+                strong#budgetProfit
+            .small-4.columns#budgetInfo(style="font-size: small;")
+        div#budgetSpendingChart(style="height: 100px;")
     .moduleOverlay#budgetOverlay

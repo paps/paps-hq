@@ -34,7 +34,7 @@ module.exports = (db) ->
 				(err) -> if err then done err.toString() else done null
 
 		@getLast: (done) ->
-			db.query 'SELECT id, count, type, text, r, g, b, date, read, md5sum FROM notifications WHERE read IS NULL OR strftime(\'%s\', \'now\') - date <= 60 * 60 * 24 * 3 ORDER BY read, date DESC', [],
+			db.query 'SELECT id, count, type, text, r, g, b, date, read, md5sum FROM notifications WHERE read IS NULL OR strftime(\'%s\', \'now\') - date <= 60 * 60 * 24 * 7 ORDER BY read, date DESC', [],
 				(err, res) ->
 					if err
 						done err.toString()

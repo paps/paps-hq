@@ -9,13 +9,11 @@
         pre.moduleAlert#bankAlertBox
         .row
             .small-9.columns
-                div#bankBalance(style="border: 2px dotted #FF976B; margin-left: 10px; margin-right: 10px; padding: 3px; font-weight: bold; font-size: 17px; text-align: center; color: rgb(255, 255, 255); cursor: pointer;")
-                    | Projection: &euro; 
-                    span#bankBalanceProjection
-                    | &nbsp;&nbsp;&nbsp;&nbsp;
-                    span(style="font-weight: normal; font-size: 11px;")
-                        | Current: &euro; 
-                        span#bankBalanceCurrent
+                div#bankBalance(style="border: 1px solid #ccc; padding: 5px; text-align: center; color: rgb(255, 255, 255); cursor: pointer;")
+                    span(style="font-size: 13px;") Projected: 
+                    span#bankBalanceProjection(style="font-weight: bold;") ?
+                    span(style="font-size: 13px;") &nbsp;&nbsp;&nbsp; Current: 
+                    span#bankBalanceCurrent(style="font-weight: bold;") ?
             .small-3.columns(style="text-align: right;")
                 a.button.small#bankMatchAll(href="#", style="margin-bottom: 4px;") Match all
         form.hide#bankForm(style="margin: 5px; padding: 5px; border: 1px solid #ccc;")

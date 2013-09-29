@@ -8,4 +8,4 @@ module.exports = (app) ->
 	if app.config.notifications.reddit.enabled
 		RedditChecker = (require __dirname + '/notificators/RedditChecker') app
 		redditChecker = new RedditChecker
-		setTimeout (() -> redditChecker.login()), app.config.notifications.reddit.startAfter * 1000
+		redditChecker.checkLater()

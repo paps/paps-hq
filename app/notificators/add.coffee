@@ -12,7 +12,7 @@ module.exports = (app) ->
 			realDevices = []
 			for category in devices.split ','
 				d = app.config.notifications.pushover.devices[category]
-				if d and not d in realDevices
+				if d and not (d in realDevices)
 					realDevices.push d
 			if realDevices.length is Object.keys(app.config.notifications.pushover.devices).length
 				pushover type, text, r, g, b

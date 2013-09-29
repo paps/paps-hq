@@ -16,6 +16,7 @@ module.exports =
 		readPassword: '' # generate password here
 		writePassword: '' # generate password here
 		pushover:
+			enabled: no
 			user: '' # put pushover user key here
 			token: '' # put pushover app token here
 			devices:
@@ -26,6 +27,5 @@ module.exports =
 			enabled: no # enable reddit mail checking or not
 			user: ''
 			password: ''
-			startAfter: 60 * 60 # seconds before first mail check
 			checkInterval: 60 * 60 # seconds between each mail check
 			userAgent: 'headquarters mail checker bot 1'

@@ -81,6 +81,7 @@ else
 (require __dirname + '/routes/modules/futureTransactions') app
 (require __dirname + '/routes/modules/notifications') app
 (require __dirname + '/routes/modules/session') app
+(require __dirname + '/routes/modules/budget') app
 
 # launch other stuff
 (require __dirname + '/init') app

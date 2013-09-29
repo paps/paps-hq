@@ -10,6 +10,9 @@ module.exports = (app) ->
 			@jar = request.jar()
 			@hasMail = no
 
+		checkLater: () =>
+			setTimeout (() => @login), @cfg.checkInterval * 1000
+
 		login: () =>
 			console.log 'Checking reddit account ' + @cfg.user + '...'
 			request
@@ -26,13 +29,13 @@ module.exports = (app) ->
 				(err, res, body) =>
 					if err
 						addNotification 'reddit', 'Login request error: ' + err, 200, 80, 80, '*'
-						setTimeout (() => @login), @cfg.checkInterval * 1000
+						@checkLater()
 					else
 						if (body.indexOf 'cookie') >= 0 # high quality parsing
 							@checkMail()
 						else
 							addNotification 'reddit', 'Login error: ' + body, 200, 80, 80, '*'
-							setTimeout (() => @login), @cfg.checkInterval * 1000
+							@checkLater()
 
 		checkMail: () =>
 			request
@@ -55,4 +58,4 @@ module.exports = (app) ->
 							@hasMail = body.data.has_mail
 						catch e
 							addNotification 'reddit', 'Exception while parsing mail status response: ' + e, 200, 80, 80, '*'
-					setTimeout (() => @login), @cfg.checkInterval * 1000
+					@checkLater()

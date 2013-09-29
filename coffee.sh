@@ -14,7 +14,7 @@ then
 		#   config must be first
 		#   Utils must be second
 		#   Session must be last
-		cat config.js Utils.js Bank.js FutureTransactions.js Notifications.js Session.js > hq.js
+		cat config.js Utils.js Bank.js FutureTransactions.js Notifications.js Budget.js Session.js > hq.js
 
 		uglifyjs hq.js -cmvo hq.js
 		ls -l hq.js

@@ -115,15 +115,25 @@ module.exports = (app) ->
 				res.json errors: ['transactions is not an array']
 				return
 			nbAdded = 0
+			nbUpdated = 0
 			iterator = (t, done) ->
-				md5sum = '' + t.amount + t.description + t.date + t.balance
+				md5sum = t.description + '_' + t.amount + '_' + t.date
 				md5sum = crypto.createHash('md5').update(md5sum).digest("hex")
-				Transaction.transactionExists md5sum, (err, exists) ->
+				Transaction.getByMd5Sum md5sum, (err, otherT) ->
 					if err
 						done err
-					else if exists
-						done null
-						console.log 'Transaction ' + md5sum + ' already in database.'
+					else if otherT
+						if t.balance < otherT.balance
+							console.log 'Transaction ' + md5sum + ' in database with greater balance, updating.'
+							Transaction.updateBalance otherT, t.balance, (err) ->
+								if err
+									done err
+								else
+									++nbUpdated
+									done null
+						else
+							console.log 'Transaction ' + md5sum + ' already in database.'
+							done null
 					else
 						console.log 'Transaction ' + md5sum + ' not in database, inserting.'
 						Transaction.insert t.amount, t.description, t.date, t.balance, no, md5sum, (err) ->
@@ -140,5 +150,5 @@ module.exports = (app) ->
 						if err
 							addNotification 'bank', 'When matching transactions: ' + err, 255, 100, 12, '*', (err) ->
 						else if nbMatched > 0 or nbAdded > 0
-							addNotification 'bank', nbAdded + ' transaction' + (if nbAdded > 1 then 's' else '') + ' added, ' + nbMatched + ' matched, ' + nbUnmatched + ' left unmatched', 50, 230, 12, '*', (err) ->
+							addNotification 'bank', nbAdded + ' transaction' + (if nbAdded > 1 then 's' else '') + ' added, ' + nbUpdated + ' updated, ' + nbMatched + ' matched, ' + nbUnmatched + ' left unmatched', 50, 230, 12, '*', (err) ->
 				res.json errors: if err then [err] else []
