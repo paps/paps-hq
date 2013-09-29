@@ -159,8 +159,10 @@ class Budget
 		@dom.income.attr 'title', 'income from ' + (nbIncomeMatched + nbIncomeUnmatched) + ' transactions (' + nbIncomeMatched + ' matched, ' + nbIncomeUnmatched + ' considered matched)'
 		@dom.spending.text Math.round(totalSpent * 100) / 100
 		@dom.spending.attr 'title', 'spending from ' + (nbSpentMatched + nbSpentUnmatched) + ' transactions (' + nbSpentMatched + ' matched, ' + nbSpentUnmatched + ' considered matched)'
-		@dom.profit.text Math.round((endBalance - startBalance) * 100) / 100
-		@dom.profit.attr 'title', 'profit with a ' + Math.abs(Math.round(((endBalance - startBalance) - (totalIncome - totalSpent)) * 100) / 100) + ' offset from the calculated value ' + (Math.round((totalIncome - totalSpent) * 100) / 100)
+		profit = Math.round((endBalance - startBalance) * 100) / 100
+		@dom.profit.text profit
+		if profit > 0 then (@dom.profit.css 'color', '#5DA423') else (@dom.profit.css 'color', '#C60F13')
+		@dom.profit.attr 'title', 'profit with a ' + Math.abs(Math.round((profit - (totalIncome - totalSpent)) * 100) / 100) + ' offset from the calculated value ' + (Math.round((totalIncome - totalSpent) * 100) / 100)
 		@dom.info.html '<strong>' + startBalance + '</strong> &rarr; <strong>' + endBalance + '</strong>' +
 			'<br /><strong>' + (nbIncomeMatched + nbIncomeUnmatched) + '</strong> credits, <strong>' + (nbSpentMatched + nbSpentUnmatched) + '</strong> debits' +
 			'<br /><strong>' + (Math.round(unknownSpending * 100) / 100) + '</strong> unk. spending'
