@@ -9,7 +9,7 @@ window.hq =
 			refreshInterval: 180 # seconds
 
 		futureTransactions:
-			tags: ['atm', 'supermarket', 'restaurant', 'fastfood', 'club', 'bar', 'pharmacy', 'transport', 'doctor', 'other']
+			tags: ['atm', 'supermarket', 'restaurant', 'fastfood', 'club', 'bar', 'pharmacy', 'transport', 'doctor', 'rent', 'other']
 
 		notifications:
 			knownTypes:

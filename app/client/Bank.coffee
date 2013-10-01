@@ -77,6 +77,11 @@ class Bank
 								if data.errors.length
 									@error JSON.stringify data.errors
 								else
+									getNbUpdates = (nb) ->
+										span = $('<span>').attr('title', 'updated ' + (if nb > 1 then (nb + ' times') else 'once') + ' (the amount might be ' + (nb+1) + ' times higher)')
+										span.text 'x' + nb + ' | '
+										span.prepend $('<img>').attr('src', '/img/page_edit.png').attr 'alt', ''
+										return span
 									maxDate = 0
 									balance = 0
 									matched = data.transactions
@@ -89,7 +94,9 @@ class Bank
 										label = $('<span>').addClass('label alert').text tr.amount
 										line.append $('<td>').css('text-align', 'right').append label
 										line.append $('<td>').css('color', '#777').css('text-align', 'center').text window.hq.utils.dateToStr tr.date, no
-										line.append $('<td>').text tr.description.toLowerCase()
+										description = $('<td>').text tr.description.toLowerCase()
+										if (typeof tr.nbUpdates) is 'number' and tr.nbUpdates > 0 then description.prepend getNbUpdates tr.nbUpdates
+										line.append description
 										pencil = $('<img>').css('cursor', 'pointer').attr('src', '/img/pencil.png').attr('title', 'edit').attr 'alt', ''
 										pencil.click(((tr) =>
 											() => @editTransaction tr
@@ -114,7 +121,9 @@ class Bank
 										label = $('<span>').addClass('label' + (if tr.futureTransaction then (if hoursOffset >= 70 then ' secondary' else '') else ' success')).text tr.amount
 										line.append $('<td>').css('text-align', 'right').append label
 										line.append $('<td>').css('color', '#777').css('text-align', 'center').text window.hq.utils.dateToStr tr.date, no
-										line.append $('<td>').text tr.description.toLowerCase()
+										description = $('<td>').text tr.description.toLowerCase()
+										if (typeof tr.nbUpdates) is 'number' and tr.nbUpdates > 0 then description.prepend getNbUpdates tr.nbUpdates
+										line.append description
 										pencil = $('<img>').css('cursor', 'pointer').attr('src', '/img/pencil.png').attr('title', 'edit').attr 'alt', ''
 										pencil.click(((tr) =>
 											() => @editTransaction tr
