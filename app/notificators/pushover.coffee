@@ -759,7 +759,7 @@ module.exports = (app) ->
 				ret = name
 		return ret
 
-	(type, text, r, g, b, device) ->
+	(addNotification, type, text, r, g, b, device) ->
 		cfg = app.config.notifications.pushover
 		if not cfg.enabled then return
 		if text.length > 350
@@ -776,3 +776,5 @@ module.exports = (app) ->
 			form: data,
 			(err, res, body) ->
 				console.log 'Notification sent to pushover, ' + (if err then ('http error: ' + err) else 'no http error') + ', response: ' + body
+				if err
+					addNotification 'pushover', 'Pushover error: ' + err, 166, 48, 76

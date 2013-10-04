@@ -3,7 +3,7 @@ class FutureTransactions
 		@dom = window.hq.utils.getDom 'futureTransactions',
 			['header', 'refresh', 'content', 'amount', 'description', 'date',
 			'time', 'id', 'overlay', 'form', 'del', 'tagContainer', 'alertBox',
-			'table', 'dnm', 'clearForm']
+			'table', 'dnm', 'clearForm', 'clearId', 'doc']
 		@dom.tags = {}
 
 		@refreshed = no
@@ -19,10 +19,17 @@ class FutureTransactions
 		@dom.alertBox.click () =>
 			@dom.alertBox.hide()
 
+		@dom.doc.click (e) =>
+			window.hq.notes.show 'doc / Transactions'
+			e.stopPropagation()
+
 		@dom.clearForm.click (e) =>
 			@show()
 			@resetForm()
 			e.stopPropagation()
+
+		@dom.clearId.click () =>
+			@dom.id.val ''
 
 		@dom.form.submit () =>
 			time = @dom.time.val()

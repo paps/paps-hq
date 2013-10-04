@@ -144,11 +144,11 @@ module.exports = (app) ->
 								done null
 			async.eachSeries transactions, iterator, (err) ->
 				if err
-					addNotification 'bank', 'When adding transactions: ' + err, 255, 100, 12, '*', (err) ->
+					addNotification 'bank', 'When adding transactions: ' + err, 133, 9, 60, '*', (err) ->
 				else
 					matchAll (err, nbMatched, nbUnmatched) ->
 						if err
-							addNotification 'bank', 'When matching transactions: ' + err, 255, 100, 12, '*', (err) ->
-						else if nbMatched > 0 or nbAdded > 0
-							addNotification 'bank', nbAdded + ' transaction' + (if nbAdded > 1 then 's' else '') + ' added, ' + nbUpdated + ' updated, ' + nbMatched + ' matched, ' + nbUnmatched + ' left unmatched', 50, 230, 12, '*', (err) ->
+							addNotification 'bank', 'When matching transactions: ' + err, 133, 9, 60, '*', (err) ->
+						else if nbMatched > 0 or nbAdded > 0 or nbUpdated > 0
+							addNotification 'bank', nbAdded + ' transaction' + (if nbAdded > 1 then 's' else '') + ' added, ' + nbUpdated + ' updated, ' + nbMatched + ' matched, ' + nbUnmatched + ' left unmatched', 201, 60, 214, '*', (err) ->
 				res.json errors: if err then [err] else []

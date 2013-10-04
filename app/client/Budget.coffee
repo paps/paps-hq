@@ -4,7 +4,7 @@ class Budget
 			['header', 'refresh', 'content', 'overlay', 'alertBox',
 			'spendingChart', 'prev', 'period1', 'period3', 'next', 'income',
 			'spending', 'profit', 'periodStart', 'periodEnd', 'info',
-			'period6', 'atm']
+			'period6', 'atm', 'doc']
 
 		@refreshed = no
 		@dom.header.click () =>
@@ -22,6 +22,10 @@ class Budget
 		@distributeAtm = yes
 
 		@dom.alertBox.click () => @dom.alertBox.hide()
+
+		@dom.doc.click (e) =>
+			window.hq.notes.show 'doc / Budget'
+			e.stopPropagation()
 
 		@dom.period1.click () =>
 			@dom.period1.addClass 'success'

@@ -2,7 +2,7 @@ window.hq =
 	config:
 		session:
 			modules:
-				all: ['notifications', 'bank', 'futureTransactions', 'budget']
+				all: ['notifications', 'bank', 'futureTransactions', 'budget', 'notes']
 				desktop: ['notifications', 'futureTransactions']
 				mobile: []
 				tablet: []
@@ -21,4 +21,5 @@ window.hq =
 				machine: 'computer.png'
 				phone: 'telephone.png'
 				headquarters: 'flag_purple.png'
+				pushover: 'bell_go.png'
 			unknownType: 'bell.png'

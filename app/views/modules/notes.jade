@@ -1,0 +1,28 @@
+.small-12.large-4.columns(style="position: relative;")
+    h6.subheader.moduleHead#notesHeader
+        .moduleIcon
+            img(src="/img/page_white_text.png", alt="")
+        .moduleButtons
+            img#notesDoc(src="/img/book.png", alt="", title="documentation")
+            | 
+            img#notesRefresh(src="/img/arrow_refresh.png", alt="", title="refresh")
+        | Notes
+    .moduleContent#notesContent
+        pre.moduleAlert#notesAlertBox
+        form.hide#notesForm(style="margin-bottom: 0px;", autocomplete="off")
+            .row
+                .small-2.columns
+                    input#notesId(type="text", disabled)
+                .small-6.columns
+                    input#notesName(type="text", required)
+                .small-4.columns
+                    ul.button-group.even-2
+                        li
+                            button.small(type="submit") OK
+                        li
+                            a.button.small#notesCancel(href="#") Cancel
+            .hide#notesWarning(style="text-align: center; font-weight: bold; color: #9C0036") Reminder: save this note!
+            textarea#notesText(style="width: 100%; height: 270px; font-family: monospace;")
+        div#notesTableContainer(style="overflow: auto; height: 300px;")
+            table#notesTable(style="width: 100%; border: none;")
+    .moduleOverlay#notesOverlay

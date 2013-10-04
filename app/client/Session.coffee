@@ -2,11 +2,15 @@ class Session
 	constructor: () ->
 		@dom = window.hq.utils.getDom 'session',
 			['all', 'desktop', 'mobile', 'tablet', 'none', 'refresh',
-			'autoRefresh', 'refreshCounter', 'save', 'alertBox']
+			'autoRefresh', 'refreshCounter', 'save', 'alertBox', 'doc']
 
 		@dom.alertBox.click () => @dom.alertBox.hide()
 
 		@dom.refresh.click () => @refreshModules()
+
+		@dom.doc.click (e) =>
+			window.hq.notes.show 'doc / Session'
+			e.stopPropagation()
 
 		@dom.none.click () =>
 			for m in window.hq.config.session.modules.all

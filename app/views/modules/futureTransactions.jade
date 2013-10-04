@@ -3,17 +3,21 @@
         .moduleIcon
             img(src="/img/money.png", alt="")
         .moduleButtons
+            img#futureTransactionsDoc(src="/img/book.png", alt="", title="documentation")
+            | 
             img#futureTransactionsClearForm(src="/img/bin.png", alt="", title="clear form")
             | 
             img#futureTransactionsRefresh(src="/img/arrow_refresh.png", alt="", title="refresh")
         | Transactions
     .moduleContent#futureTransactionsContent
         pre.moduleAlert#futureTransactionsAlertBox
-        form#futureTransactionsForm(style="margin-bottom: 0px;")
+        form#futureTransactionsForm(style="margin-bottom: 0px;", autocomplete="off")
             .row
                 .small-3.columns
-                    label(for="futureTransactionsId") ID
-                    input#futureTransactionsId(type="text")
+                    label
+                        | ID 
+                        img#futureTransactionsClearId(src="/img/bin.png", alt="", title="clear id field")
+                    input#futureTransactionsId(type="text", disabled)
                 .small-4.columns
                     label(for="futureTransactionsAmount") Amount
                     input#futureTransactionsAmount(type="text", required)
@@ -34,10 +38,12 @@
                     label.inline(for="futureTransactionsDescription") Description
                 .small-5.columns
                     input#futureTransactionsDescription(type="text")
-                .small-2.columns
-                    button.small(style="width: 100%;", type="submit") OK
-                .small-2.columns
-                    a.button.small#futureTransactionsDel(style="width: 100%;", href="#") Del
+                .small-4.columns
+                    ul.button-group.even-2
+                        li
+                            button.small(type="submit") OK
+                        li
+                            a.button.small#futureTransactionsDel(href="#") Del
         div(style="overflow: auto; height: 300px;")
             table#futureTransactionsTable(style="width: 100%; border: none;")
     .moduleOverlay#futureTransactionsOverlay

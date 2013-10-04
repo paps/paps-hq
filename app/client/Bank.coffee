@@ -5,7 +5,7 @@ class Bank
 			'balance', 'balanceProjection', 'balanceCurrent', 'id', 'amount',
 			'select', 'cancel', 'form', 'matchAll', 'info', 'infoTr',
 			'infoAmount', 'infoDate', 'infoDescription', 'infoCancel',
-			'infoUnmatch']
+			'infoUnmatch', 'doc']
 
 		@refreshed = no
 		@dom.header.click () =>
@@ -23,6 +23,10 @@ class Bank
 
 		@dom.infoCancel.click () =>
 			@dom.info.hide()
+
+		@dom.doc.click (e) =>
+			window.hq.notes.show 'doc / Bank'
+			e.stopPropagation()
 
 		@dom.balance.click () =>
 			if @dom.balance.css('color').indexOf('255') >= 0

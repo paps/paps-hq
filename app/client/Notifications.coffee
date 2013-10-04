@@ -1,7 +1,8 @@
 class Notifications
 	constructor: () ->
 		@dom = window.hq.utils.getDom 'notifications',
-			['header', 'refresh', 'content', 'overlay', 'alertBox', 'table']
+			['header', 'refresh', 'content', 'overlay', 'alertBox', 'table',
+			'doc']
 
 		@refreshed = no
 		@dom.header.click () =>
@@ -12,6 +13,10 @@ class Notifications
 			e.stopPropagation()
 
 		@dom.alertBox.click () => @dom.alertBox.hide()
+
+		@dom.doc.click (e) =>
+			window.hq.notes.show 'doc / Notifications'
+			e.stopPropagation()
 
 	refresh: () =>
 		@overlay yes
