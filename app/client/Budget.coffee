@@ -4,7 +4,7 @@ class Budget
 			['header', 'refresh', 'content', 'overlay', 'alertBox',
 			'spendingChart', 'prev', 'period1', 'period3', 'next', 'income',
 			'spending', 'profit', 'periodStart', 'periodEnd', 'info',
-			'period6', 'atm', 'doc']
+			'period6', 'atm', 'doc', 'balanceChart']
 
 		@refreshed = no
 		@dom.header.click () =>
@@ -19,6 +19,7 @@ class Budget
 		@periodMonths = 1
 		@periodEnd = @addMonthsToDate @periodStart, @periodMonths
 		@spendingChart = null
+		@balanceChart = null
 		@distributeAtm = yes
 
 		@dom.alertBox.click () => @dom.alertBox.hide()
@@ -82,7 +83,18 @@ class Budget
 		date.setTime date.getTime() - 1000 * 10
 		return date
 
-	buildSpendingChart: (spending) =>
+	computeAtm: (spending, total) =>
+		if spending.atm
+			atm = spending.atm
+			delete spending.atm
+			total -= atm
+			for tag, spent of spending
+				tagSize = spent / total
+				spending[tag] = spent + atm * tagSize
+		return spending
+
+	buildSpendingChart: (spending, totalSpent) =>
+		if @distributeAtm then spending = @computeAtm(spending, totalSpent)
 		tags = []
 		values = []
 		for tag, value of spending
@@ -110,15 +122,14 @@ class Budget
 				tickLength: 0
 			yAxis:
 				title: null
-				gridLineWidth: 0
-				lineWidth: 1
-				lineColor: '#888'
+				gridLineWidth: 1
+				gridLineColor: '#ddd'
+				lineWidth: 0
 				endOnTick: no
 				maxPadding: 0
 				tickPixelInterval: 20
-				tickLength: 4
-				tickWidth: 1
-				tickColor: '#888'
+				tickLength: 0
+				tickWidth: 0
 			credits:
 				enabled: false
 			tooltip:
@@ -132,6 +143,56 @@ class Budget
 				name: 'spent'
 			]
 
+	buildBalanceChart: (balanceOverTime) =>
+		values = []
+		for day, value of balanceOverTime
+			values.push [(parseInt day), value]
+		@balanceChart = new Highcharts.Chart
+			chart:
+				renderTo: @dom.balanceChart.get(0)
+				animation: no
+			plotOptions:
+				series:
+					animation: no
+				line:
+					marker:
+						enabled: false
+			legend:
+				enabled: no
+			title:
+				text: null
+			xAxis:
+				lineColor: '#888'
+				tickLength: 0
+				type: 'datetime'
+				dateTimeLabelFormats:
+					hour: '%b %e'
+					day: '%b %e'
+					week: '%b %e'
+					month: '%b %e'
+			yAxis:
+				title: null
+				gridLineWidth: 1
+				gridLineColor: '#ddd'
+				lineWidth: 0
+				endOnTick: no
+				maxPadding: 0
+				tickPixelInterval: 20
+				tickLength: 0
+				tickWidth: 0
+			credits:
+				enabled: false
+			tooltip:
+				animation: false
+				shadow: false
+				borderRadius: 0
+				hideDelay: 0
+			colors: ['#2284A1']
+			series: [
+				data: values
+				name: 'balance'
+			]
+
 	computeTransactions: (transactions) =>
 		startBalance = null
 		endBalance = null
@@ -143,9 +204,13 @@ class Budget
 		nbIncomeUnmatched = 0
 		unknownSpending = 0
 		spending = {}
+		balanceOverTime = {}
 		for tr in transactions
-			if startBalance is null then startBalance = tr.balance
+			if startBalance is null then startBalance = tr.balance - tr.amount
 			endBalance = tr.balance
+			day = new Date tr.date * 1000
+			day = Date.UTC day.getFullYear(), day.getMonth(), day.getDate()
+			balanceOverTime[day] = tr.balance
 			if tr.amount >= 0
 				totalIncome += tr.amount
 				if tr.futureTransaction then ++nbIncomeMatched else ++nbIncomeUnmatched
@@ -158,7 +223,8 @@ class Budget
 				else
 					++nbSpentUnmatched
 					unknownSpending -= tr.amount
-		@buildSpendingChart spending
+		@buildSpendingChart spending, totalSpent
+		@buildBalanceChart balanceOverTime
 		@dom.income.text Math.round(totalIncome * 100) / 100
 		@dom.income.attr 'title', 'income from ' + (nbIncomeMatched + nbIncomeUnmatched) + ' transactions (' + nbIncomeMatched + ' matched, ' + nbIncomeUnmatched + ' considered matched)'
 		@dom.spending.text Math.round(totalSpent * 100) / 100
@@ -167,9 +233,9 @@ class Budget
 		@dom.profit.text profit
 		if profit > 0 then (@dom.profit.css 'color', '#5DA423') else (@dom.profit.css 'color', '#C60F13')
 		@dom.profit.attr 'title', 'profit with a ' + Math.abs(Math.round((profit - (totalIncome - totalSpent)) * 100) / 100) + ' offset from the calculated value ' + (Math.round((totalIncome - totalSpent) * 100) / 100)
-		@dom.info.html '<strong>' + startBalance + '</strong> &rarr; <strong>' + endBalance + '</strong>' +
-			'<br /><strong>' + (nbIncomeMatched + nbIncomeUnmatched) + '</strong> credits, <strong>' + (nbSpentMatched + nbSpentUnmatched) + '</strong> debits' +
-			'<br /><strong>' + (Math.round(unknownSpending * 100) / 100) + '</strong> unk. spending'
+		@dom.info.html '<strong>' + (Math.round(startBalance * 100) / 100)  + '</strong> &rarr; <strong>' + (Math.round(endBalance * 100) / 100) + '</strong>' +
+			'<br />Credits: <strong>' + (nbIncomeMatched + nbIncomeUnmatched) + '</strong>, debits: <strong>' + (nbSpentMatched + nbSpentUnmatched) + '</strong>' +
+			'<br />Unk. spending: <strong>' + (Math.round(unknownSpending * 100) / 100) + '</strong>'
 
 	notEnoughData: () =>
 		@dom.income.empty()
@@ -182,6 +248,9 @@ class Budget
 		if @spendingChart
 			@spendingChart.destroy()
 			@spendingChart = null
+		if @balanceChart
+			@balanceChart.destroy()
+			@balanceChart = null
 		($.ajax '/modules/budget/period',
 			type: 'GET'
 			dataType: 'json'

@@ -34,7 +34,7 @@ module.exports = (db) ->
 						done null, null
 
 		@getUnmatched: (done) ->
-			db.query 'SELECT id, amount, description, date, balance, consider_matched, md5sum, nb_updates FROM transactions WHERE consider_matched IS NULL AND id NOT IN (SELECT transaction_id FROM future_transactions WHERE transaction_id >= 1) ORDER BY date DESC, balance', [],
+			db.query 'SELECT id, amount, description, date, balance, consider_matched, md5sum, nb_updates FROM transactions WHERE consider_matched IS NULL AND id NOT IN (SELECT transaction_id FROM future_transactions WHERE transaction_id >= 1) ORDER BY date DESC, id DESC', [],
 				(err, res) ->
 					if err
 						done err.toString()
@@ -45,7 +45,7 @@ module.exports = (db) ->
 						done null, ret
 
 		@getLastMatched: (done) ->
-			db.query 'SELECT t.id AS tId, t.amount AS tAmount, t.description AS tDescription, t.date AS tDate, t.balance AS tBalance, t.consider_matched AS tConsiderMatched, t.md5sum AS tMd5sum, t.nb_updates AS tNbUpdates, ft.id AS ftId, ft.amount AS ftAmount, ft.description AS ftDescription, ft.date AS ftDate, ft.tag AS ftTag FROM transactions AS t, future_transactions AS ft WHERE (ft.transaction_id = t.id OR t.consider_matched >= 1) AND strftime(\'%s\', \'now\') - t.date <= 60 * 60 * 24 * 30 GROUP BY t.id ORDER BY t.date DESC, t.balance', [],
+			db.query 'SELECT t.id AS tId, t.amount AS tAmount, t.description AS tDescription, t.date AS tDate, t.balance AS tBalance, t.consider_matched AS tConsiderMatched, t.md5sum AS tMd5sum, t.nb_updates AS tNbUpdates, ft.id AS ftId, ft.amount AS ftAmount, ft.description AS ftDescription, ft.date AS ftDate, ft.tag AS ftTag FROM transactions AS t, future_transactions AS ft WHERE (ft.transaction_id = t.id OR t.consider_matched >= 1) AND strftime(\'%s\', \'now\') - t.date <= 60 * 60 * 24 * 30 GROUP BY t.id ORDER BY t.date DESC, t.id DESC', [],
 				(err, res) ->
 					if err
 						done err.toString()
@@ -64,7 +64,7 @@ module.exports = (db) ->
 						done null, ret
 
 		@getPeriod: (start, end, done) ->
-			db.query 'SELECT t.id AS tId, t.amount AS tAmount, t.description AS tDescription, t.date AS tDate, t.balance AS tBalance, t.consider_matched AS tConsiderMatched, t.md5sum AS tMd5sum, t.nb_updates AS tNbUpdates,ft.id AS ftId, ft.amount AS ftAmount, ft.description AS ftDescription, ft.date AS ftDate, ft.tag AS ftTag FROM transactions AS t, future_transactions AS ft WHERE (ft.transaction_id = t.id OR t.consider_matched >= 1) AND t.date >= ? and t.date < ? GROUP BY t.id ORDER BY t.date',
+			db.query 'SELECT t.id AS tId, t.amount AS tAmount, t.description AS tDescription, t.date AS tDate, t.balance AS tBalance, t.consider_matched AS tConsiderMatched, t.md5sum AS tMd5sum, t.nb_updates AS tNbUpdates,ft.id AS ftId, ft.amount AS ftAmount, ft.description AS ftDescription, ft.date AS ftDate, ft.tag AS ftTag FROM transactions AS t, future_transactions AS ft WHERE (ft.transaction_id = t.id OR t.consider_matched >= 1) AND t.date >= ? AND t.date < ? GROUP BY t.id ORDER BY t.date, t.id',
 				[start, end],
 				(err, res) ->
 					if err
