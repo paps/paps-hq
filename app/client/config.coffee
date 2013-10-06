@@ -2,14 +2,17 @@ window.hq =
 	config:
 		session:
 			modules:
-				all: ['notifications', 'bank', 'futureTransactions', 'budget', 'notes']
+				all: ['notifications', 'bank', 'futureTransactions', 'budget',
+					'notes']
 				desktop: ['notifications', 'futureTransactions']
 				mobile: []
 				tablet: []
 			refreshInterval: 180 # seconds
 
 		futureTransactions:
-			tags: ['atm', 'supermarket', 'restaurant', 'fastfood', 'club', 'bar', 'pharmacy', 'transport', 'doctor', 'rent', 'other']
+			tags: ['atm', 'supermarket', 'restaurant', 'fastfood', 'club',
+				'bar', 'pharmacy', 'transport', 'doctor', 'rent', 'utilities',
+				'other']
 
 		notifications:
 			knownTypes:

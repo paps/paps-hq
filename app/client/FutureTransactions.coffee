@@ -159,11 +159,19 @@ class FutureTransactions
 						)(transaction))
 						@dom.table.append line
 					header.text nbUnmatched + ' unmatched, ' + nbDnm + ' DNM, also showing ' + nbMatched + ' matched'
+					@autocomplete data.transactions
 			else
 				@error 'malformed json reply'
 		).fail((xhr, status, err) =>
 			@error status + ': ' + err
 		).always () => @overlay no
+
+	autocomplete: (transactions) =>
+		completions = []
+		for t in transactions
+			completions.push t.description
+		@dom.description.autocomplete
+			source: completions
 
 	show: () =>
 		@dom.content.show()

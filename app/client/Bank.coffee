@@ -82,9 +82,10 @@ class Bank
 									@error JSON.stringify data.errors
 								else
 									getNbUpdates = (nb) ->
-										span = $('<span>').attr('title', 'updated ' + (if nb > 1 then (nb + ' times') else 'once') + ' (the amount might be ' + (nb+1) + ' times higher)')
-										span.text 'x' + nb + ' | '
-										span.prepend $('<img>').attr('src', '/img/page_edit.png').attr 'alt', ''
+										span = $('<span>').css('font-weight', 'bold').attr('title', 'updated ' + (if nb > 1 then (nb + ' times') else 'once') + ' (the amount might be ' + (nb+1) + ' times higher)')
+										span.text nb + 'x'
+										span.append $('<img>').attr('src', '/img/page_edit.png').attr 'alt', ''
+										span.append ' '
 										return span
 									maxDate = 0
 									balance = 0

@@ -40,3 +40,10 @@
 	float: left;
 	padding-right: 5px;
 }
+
+.ui-autocomplete {
+	max-height: 120px;
+	max-width: 250px;
+	overflow: auto;
+	font-size: small;
+}
