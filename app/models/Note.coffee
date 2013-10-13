@@ -18,6 +18,28 @@ module.exports = (db) ->
 				[(if (typeof note) is 'object' then note.id else note)],
 				(err) -> if err then done err.toString() else done null
 
+		@getById: (id, done) ->
+			db.query 'SELECT id, date, name, text FROM notes WHERE id = ?',
+				[id],
+				(err, res) ->
+					if err
+						done err.toString()
+					else if res?.rowCount >= 1
+						done null, new Note res.rows[0].id, res.rows[0].date, res.rows[0].name, res.rows[0].text
+					else
+						done null
+
+		@getList: (done) ->
+			db.query 'SELECT id, date, name FROM notes ORDER BY date DESC', [],
+				(err, res) ->
+					if err
+						done err.toString()
+					else
+						ret = []
+						for row in res.rows
+							ret.push new Note row.id, row.date, row.name, null
+						done null, ret
+
 		@get: (done) ->
 			db.query 'SELECT id, date, name, text FROM notes ORDER BY date DESC', [],
 				(err, res) ->

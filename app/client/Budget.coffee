@@ -67,11 +67,11 @@ class Budget
 		@dom.atm.click (e) =>
 			if @distributeAtm
 				@distributeAtm = no
-				@dom.atm.attr 'title', 'distribute atm transactions (currently off)'
+				@dom.atm.attr 'title', 'enable atm distribution (currently off)'
 				@dom.atm.attr 'src', '/img/server_go.png'
 			else
 				@distributeAtm = yes
-				@dom.atm.attr 'title', 'distribute atm transactions (currently on)'
+				@dom.atm.attr 'title', 'disable atm distribution (currently on)'
 				@dom.atm.attr 'src', '/img/server_delete.png'
 			@refresh()
 			e.stopPropagation()
@@ -83,23 +83,30 @@ class Budget
 		date.setTime date.getTime() - 1000 * 10
 		return date
 
-	computeAtm: (spending, total) =>
+	round: (v) ->
+		Math.round(v * 100) / 100
+
+	computeAtm: (spending) =>
 		if spending.atm
 			atm = spending.atm
 			delete spending.atm
-			total -= atm
+			total = 0
 			for tag, spent of spending
-				tagSize = spent / total
-				spending[tag] = spent + atm * tagSize
+				if not (tag in window.hq.config.budget.ignoredTagsForAtmDistribution) and tag isnt 'atm'
+					total += spent
+			for tag, spent of spending
+				if not (tag in window.hq.config.budget.ignoredTagsForAtmDistribution) and tag isnt 'atm'
+					tagSize = spent / total
+					spending[tag] = spent + atm * tagSize
 		return spending
 
 	buildSpendingChart: (spending, totalSpent) =>
-		if @distributeAtm then spending = @computeAtm(spending, totalSpent)
+		if @distributeAtm then spending = @computeAtm(spending)
 		tags = []
 		values = []
 		for tag, value of spending
 			tags.push tag
-			values.push Math.round(value * 100) / 100
+			values.push @round value
 		if not tags.length then return
 		@spendingChart = new Highcharts.Chart
 			chart:
@@ -194,6 +201,7 @@ class Budget
 			]
 
 	computeTransactions: (transactions) =>
+		startDay = null
 		startBalance = null
 		endBalance = null
 		totalSpent = 0
@@ -206,11 +214,14 @@ class Budget
 		spending = {}
 		balanceOverTime = {}
 		for tr in transactions
-			if startBalance is null then startBalance = tr.balance - tr.amount
-			endBalance = tr.balance
 			day = new Date tr.date * 1000
 			day = Date.UTC day.getFullYear(), day.getMonth(), day.getDate()
-			balanceOverTime[day] = tr.balance
+			if startBalance is null
+				startBalance = tr.balance - tr.amount
+				startDay = day
+				balanceOverTime[startDay] = @round(tr.balance - tr.amount)
+			if day isnt startDay then balanceOverTime[day] = tr.balance
+			endBalance = tr.balance
 			if tr.amount >= 0
 				totalIncome += tr.amount
 				if tr.futureTransaction then ++nbIncomeMatched else ++nbIncomeUnmatched
@@ -225,17 +236,17 @@ class Budget
 					unknownSpending -= tr.amount
 		@buildSpendingChart spending, totalSpent
 		@buildBalanceChart balanceOverTime
-		@dom.income.text Math.round(totalIncome * 100) / 100
-		@dom.income.attr 'title', 'income from ' + (nbIncomeMatched + nbIncomeUnmatched) + ' transactions (' + nbIncomeMatched + ' matched, ' + nbIncomeUnmatched + ' considered matched)'
-		@dom.spending.text Math.round(totalSpent * 100) / 100
-		@dom.spending.attr 'title', 'spending from ' + (nbSpentMatched + nbSpentUnmatched) + ' transactions (' + nbSpentMatched + ' matched, ' + nbSpentUnmatched + ' considered matched)'
-		profit = Math.round((endBalance - startBalance) * 100) / 100
+		@dom.income.text @round totalIncome
+		@dom.income.attr 'title', 'income from ' + (nbIncomeMatched + nbIncomeUnmatched) + ' transaction' + (if (nbIncomeMatched + nbIncomeUnmatched) > 1 then 's' else '') + ' (' + nbIncomeMatched + ' matched, ' + nbIncomeUnmatched + ' considered matched)'
+		@dom.spending.text @round totalSpent
+		@dom.spending.attr 'title', 'spending from ' + (nbSpentMatched + nbSpentUnmatched) + ' transaction' + (if (nbSpentMatched + nbSpentUnmatched) > 1 then 's' else '') + ' (' + nbSpentMatched + ' matched, ' + nbSpentUnmatched + ' considered matched)'
+		profit = @round(endBalance - startBalance)
 		@dom.profit.text profit
 		if profit > 0 then (@dom.profit.css 'color', '#5DA423') else (@dom.profit.css 'color', '#C60F13')
-		@dom.profit.attr 'title', 'profit with a ' + Math.abs(Math.round((profit - (totalIncome - totalSpent)) * 100) / 100) + ' offset from the calculated value ' + (Math.round((totalIncome - totalSpent) * 100) / 100)
-		@dom.info.html '<strong>' + (Math.round(startBalance * 100) / 100)  + '</strong> &rarr; <strong>' + (Math.round(endBalance * 100) / 100) + '</strong>' +
+		@dom.profit.attr 'title', 'profit with a ' + Math.abs(@round(profit - (totalIncome - totalSpent))) + ' offset from the calculated value ' + @round(totalIncome - totalSpent)
+		@dom.info.html '<strong>' + @round(startBalance) + '</strong> &rarr; <strong>' + @round(endBalance) + '</strong>' +
 			'<br />Credits: <strong>' + (nbIncomeMatched + nbIncomeUnmatched) + '</strong>, debits: <strong>' + (nbSpentMatched + nbSpentUnmatched) + '</strong>' +
-			'<br />Unk. spending: <strong>' + (Math.round(unknownSpending * 100) / 100) + '</strong>'
+			'<br />Unk. spending: <strong>' + @round(unknownSpending) + '</strong>'
 
 	notEnoughData: () =>
 		@dom.income.empty()

@@ -12,7 +12,7 @@ window.hq =
 		futureTransactions:
 			tags: ['atm', 'supermarket', 'restaurant', 'fastfood', 'club',
 				'bar', 'pharmacy', 'transport', 'doctor', 'rent', 'utilities',
-				'other']
+				'domain', 'other']
 
 		notifications:
 			knownTypes:
@@ -26,3 +26,9 @@ window.hq =
 				headquarters: 'flag_purple.png'
 				pushover: 'bell_go.png'
 			unknownType: 'bell.png'
+
+		budget:
+			ignoredTagsForAtmDistribution: ['rent', 'domain', 'utilities']
+
+		notes:
+			saveInterval: 30 # seconds
