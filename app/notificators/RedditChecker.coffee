@@ -11,7 +11,7 @@ module.exports = (app) ->
 			@hasMail = no
 
 		checkLater: () =>
-			setTimeout (() => @login), @cfg.checkInterval * 1000
+			setTimeout (() => @login()), @cfg.checkInterval * 1000
 
 		login: () =>
 			console.log 'Checking reddit account ' + @cfg.user + '...'

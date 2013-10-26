@@ -2,6 +2,10 @@
 	max-width: 100%;
 }
 
+.moduleDiv {
+	position: relative;
+}
+
 .moduleOverlay {
 	position: absolute;
 	width: 100%;
@@ -46,4 +50,9 @@
 	max-width: 250px;
 	overflow: auto;
 	font-size: small;
+}
+
+#miningTable td {
+	padding: 0px;
+	vertical-align: bottom;
 }

@@ -15,6 +15,7 @@ express.application.config = config
 express.application.sessionStore = new FileSessionStore
 	path: __dirname + '/sessions'
 	maxAge: 1000 * 60 * 60 * 24 * 45 # 45 days
+express.application.hq = {}
 
 app = express()
 
@@ -83,6 +84,7 @@ else
 (require __dirname + '/routes/modules/session') app
 (require __dirname + '/routes/modules/budget') app
 (require __dirname + '/routes/modules/notes') app
+(require __dirname + '/routes/modules/mining') app
 
 # launch other stuff
 (require __dirname + '/init') app

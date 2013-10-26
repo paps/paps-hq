@@ -29,3 +29,8 @@ module.exports =
 			password: ''
 			checkInterval: 60 * 60 # seconds between each mail check
 			userAgent: 'headquarters mail checker bot 1'
+
+	mining:
+		password: '' # generate password here
+		checkInterval: 60 # seconds
+		allowedDowntime: 60 # seconds

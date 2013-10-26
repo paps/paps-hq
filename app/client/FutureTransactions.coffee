@@ -169,7 +169,8 @@ class FutureTransactions
 	autocomplete: (transactions) =>
 		completions = []
 		for t in transactions
-			completions.push t.description
+			if not (t.description in completions)
+				completions.push t.description
 		@dom.description.autocomplete
 			source: completions
 
