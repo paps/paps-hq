@@ -12,3 +12,7 @@ module.exports = (app) ->
 	Mining = (require __dirname + '/lib/Mining') app
 	app.hq.mining = new Mining
 	app.hq.mining.checkLater()
+
+	Wallets = (require __dirname + '/lib/Wallets') app
+	app.hq.wallets = new Wallets
+	app.hq.wallets.checkLater(app.config.wallets.firstCheck)

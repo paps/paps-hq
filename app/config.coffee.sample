@@ -34,3 +34,55 @@ module.exports =
 		password: '' # generate password here
 		checkInterval: 60 # seconds
 		allowedDowntime: 60 # seconds
+
+	wallets:
+		checkInterval: 60 * 60 # seconds
+		firstCheck: 3 * 60 # seconds
+		list: [
+			{
+				currency: 'Bitcoin'
+				symbol: 'BTC'
+				icon: 'bitcoin'
+				wallets: [
+					{
+						name: 'main'
+						humanUrl: 'https://blockchain.info/address/15cA1zaEE54K9mrXMrLWKk6KGWDTTUG6Gh'
+						machineUrl: 'https://blockchain.info/q/addressbalance/15cA1zaEE54K9mrXMrLWKk6KGWDTTUG6Gh'
+						multiplier: 0.00000001
+						offset: 0
+						address: '15cA1zaEE54K9mrXMrLWKk6KGWDTTUG6Gh'
+					},
+					{
+						name: 'miner1+ggo'
+						humanUrl: 'https://blockchain.info/address/1NgWDQed3nJcHvZ7GH8U7GFeveJQA1PJ6x'
+						machineUrl: 'https://blockchain.info/q/addressbalance/1NgWDQed3nJcHvZ7GH8U7GFeveJQA1PJ6x'
+						multiplier: 0.00000001
+						offset: 0
+						address: '1NgWDQed3nJcHvZ7GH8U7GFeveJQA1PJ6x'
+					},
+					{
+						name: 'miner2'
+						humanUrl: 'https://blockchain.info/address/17F2MdDLNiQ8mZ3Jwt5LZM3jkCrDX2n9QH'
+						machineUrl: 'https://blockchain.info/q/addressbalance/17F2MdDLNiQ8mZ3Jwt5LZM3jkCrDX2n9QH'
+						multiplier: 0.00000001
+						offset: 0
+						address: '17F2MdDLNiQ8mZ3Jwt5LZM3jkCrDX2n9QH'
+					}
+				]
+			},
+			{
+				currency: 'Litecoin'
+				symbol: 'LTC'
+				icon: 'litecoin'
+				wallets: [
+					{
+						name: 'main'
+						humanUrl: 'http://block-explorer.com/address/La5aq35eFgPDQVi8G7dZnHXy8DMt3m3LNu'
+						machineUrl: 'http://litecoinscout.com/chain/Litecoin/q/getreceivedbyaddress/La5aq35eFgPDQVi8G7dZnHXy8DMt3m3LNu'
+						multiplier: 1
+						offset: -0.5
+						address: 'La5aq35eFgPDQVi8G7dZnHXy8DMt3m3LNu'
+					}
+				]
+			}
+		]

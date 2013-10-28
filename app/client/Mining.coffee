@@ -79,13 +79,9 @@ class Mining
 							@dom.table.append line
 					@dom.summary.empty()
 					if nbMiners
-						@dom.summary.text totalMh + ' mh/s with ' + nbMiners + ' miner' + (if nbMiners > 1 then 's' else '') + ' (' + nbDevices + ' device' + (if nbDevices > 1 then 's' else '') + ').'
+						@dom.summary.text (Math.round(totalMh * 100) / 100) + ' mh/s with ' + nbMiners + ' miner' + (if nbMiners > 1 then 's' else '') + ' (' + nbDevices + ' device' + (if nbDevices > 1 then 's' else '') + ').'
 					else
 						@dom.summary.text 'No updates received from miners yet.'
-					@dom.summary.append ' Wallets: '
-					for w in window.hq.config.mining.wallets
-						@dom.summary.append $('<a>').attr('href', w.url).attr('target', '_blank').text w.name
-						@dom.summary.append ' '
 			else
 				@error 'malformed json reply'
 		).fail((xhr, status, err) =>

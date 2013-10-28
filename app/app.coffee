@@ -85,6 +85,7 @@ else
 (require __dirname + '/routes/modules/budget') app
 (require __dirname + '/routes/modules/notes') app
 (require __dirname + '/routes/modules/mining') app
+(require __dirname + '/routes/modules/wallets') app
 
 # launch other stuff
 (require __dirname + '/init') app

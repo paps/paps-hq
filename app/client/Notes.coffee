@@ -85,11 +85,11 @@ class Notes
 						line.append $('<td>').css('cursor', 'pointer').attr('title', 'edit').text(n.name).click(((n) =>
 							() => @editNote n
 						)(n))
-						imgDel = $('<img>').attr('alt', '').attr('title', 'delete').attr('src', '/img/cross.png').css 'cursor', 'pointer'
+						imgDel = $('<img>').attr('title', 'delete').attr('src', '/img/cross.png').css 'cursor', 'pointer'
 						imgDel.click(((n) =>
 							() => if confirm 'Are you sure?' then @delNote n
 						)(n))
-						imgEdit = $('<img>').attr('alt', '').attr('title', 'edit').attr('src', '/img/pencil.png').css 'cursor', 'pointer'
+						imgEdit = $('<img>').attr('title', 'edit').attr('src', '/img/pencil.png').css 'cursor', 'pointer'
 						imgEdit.click(((n) =>
 							() => @editNote n
 						)(n))

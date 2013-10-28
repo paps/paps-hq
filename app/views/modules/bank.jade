@@ -5,13 +5,15 @@
         .moduleButtons
             img#bankDoc(src="/img/book.png", alt="", title="documentation")
             | 
+            img#bankPrivacy(src="/img/eye.png", alt="", title="toggle privacy mode")
+            | 
             img#bankRefresh(src="/img/arrow_refresh.png", alt="", title="refresh")
         | Bank
     .moduleContent#bankContent
         pre.moduleAlert#bankAlertBox
         .row
             .small-9.columns
-                div#bankBalance(style="border: 1px solid #ccc; padding: 5px; text-align: center; color: rgb(255, 255, 255); cursor: pointer;")
+                div#bankBalance(style="border: 1px solid #ccc; padding: 5px; text-align: center; color: rgb(255, 255, 255);")
                     span(style="font-size: 13px;") Projected: 
                     span#bankBalanceProjection(style="font-weight: bold;") ?
                     span(style="font-size: 13px;") &nbsp;&nbsp;&nbsp; Current: 

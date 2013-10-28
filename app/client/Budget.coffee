@@ -4,7 +4,7 @@ class Budget
 			['header', 'refresh', 'content', 'overlay', 'alertBox',
 			'spendingChart', 'prev', 'period1', 'period3', 'next', 'income',
 			'spending', 'profit', 'periodStart', 'periodEnd', 'info',
-			'period6', 'atm', 'doc', 'balanceChart']
+			'period6', 'atm', 'doc', 'balanceChart', 'privacy']
 
 		@refreshed = no
 		@dom.header.click () =>
@@ -21,6 +21,7 @@ class Budget
 		@spendingChart = null
 		@balanceChart = null
 		@distributeAtm = yes
+		@privacyMode = yes
 
 		@dom.alertBox.click () => @dom.alertBox.hide()
 
@@ -73,6 +74,11 @@ class Budget
 				@distributeAtm = yes
 				@dom.atm.attr 'title', 'disable atm distribution (currently on)'
 				@dom.atm.attr 'src', '/img/server_delete.png'
+			@refresh()
+			e.stopPropagation()
+
+		@dom.privacy.click (e) =>
+			@privacyMode = not @privacyMode
 			@refresh()
 			e.stopPropagation()
 
@@ -154,7 +160,7 @@ class Budget
 		values = []
 		for day, value of balanceOverTime
 			values.push [(parseInt day), value]
-		@balanceChart = new Highcharts.Chart
+		chartConf =
 			chart:
 				renderTo: @dom.balanceChart.get(0)
 				animation: no
@@ -188,10 +194,10 @@ class Budget
 				tickLength: 0
 				tickWidth: 0
 			credits:
-				enabled: false
+				enabled: no
 			tooltip:
-				animation: false
-				shadow: false
+				animation: no
+				shadow: no
 				borderRadius: 0
 				hideDelay: 0
 			colors: ['#2284A1']
@@ -199,6 +205,10 @@ class Budget
 				data: values
 				name: 'balance'
 			]
+		if @privacyMode
+			chartConf.yAxis.labels =
+				enabled: no
+		@balanceChart = new Highcharts.Chart chartConf
 
 	computeTransactions: (transactions) =>
 		startDay = null
@@ -241,12 +251,19 @@ class Budget
 		@dom.spending.text @round totalSpent
 		@dom.spending.attr 'title', 'spending from ' + (nbSpentMatched + nbSpentUnmatched) + ' transaction' + (if (nbSpentMatched + nbSpentUnmatched) > 1 then 's' else '') + ' (' + nbSpentMatched + ' matched, ' + nbSpentUnmatched + ' considered matched)'
 		profit = @round(endBalance - startBalance)
-		@dom.profit.text profit
+		if @privacyMode
+			@dom.profit.empty()
+		else
+			@dom.profit.text profit
 		if profit > 0 then (@dom.profit.css 'color', '#5DA423') else (@dom.profit.css 'color', '#C60F13')
 		@dom.profit.attr 'title', 'profit with a ' + Math.abs(@round(profit - (totalIncome - totalSpent))) + ' offset from the calculated value ' + @round(totalIncome - totalSpent)
-		@dom.info.html '<strong>' + @round(startBalance) + '</strong> &rarr; <strong>' + @round(endBalance) + '</strong>' +
-			'<br />Credits: <strong>' + (nbIncomeMatched + nbIncomeUnmatched) + '</strong>, debits: <strong>' + (nbSpentMatched + nbSpentUnmatched) + '</strong>' +
+		if @privacyMode
+			infoHtml = ''
+		else
+			infoHtml = '<strong>' + @round(startBalance) + '</strong> &rarr; <strong>' + @round(endBalance) + '</strong>'
+		infoHtml += '<br />Credits: <strong>' + (nbIncomeMatched + nbIncomeUnmatched) + '</strong>, debits: <strong>' + (nbSpentMatched + nbSpentUnmatched) + '</strong>' +
 			'<br />Unk. spending: <strong>' + @round(unknownSpending) + '</strong>'
+		@dom.info.html infoHtml
 
 	notEnoughData: () =>
 		@dom.income.empty()
