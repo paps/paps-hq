@@ -1,13 +1,13 @@
 .moduleDiv
     h6.subheader.moduleHead#bankHeader
         .moduleIcon
-            img(src="/img/money_euro.png", alt="")
+            img(src="#{rootPath}img/money_euro.png", alt="")
         .moduleButtons
-            img#bankDoc(src="/img/book.png", alt="", title="documentation")
+            img#bankDoc(src="#{rootPath}img/book.png", alt="", title="documentation")
             | 
-            img#bankPrivacy(src="/img/eye.png", alt="", title="toggle privacy mode")
+            img#bankPrivacy(src="#{rootPath}img/eye.png", alt="", title="toggle privacy mode")
             | 
-            img#bankRefresh(src="/img/arrow_refresh.png", alt="", title="refresh")
+            img#bankRefresh(src="#{rootPath}img/arrow_refresh.png", alt="", title="refresh")
         | Bank
     .moduleContent#bankContent
         pre.moduleAlert#bankAlertBox

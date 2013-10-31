@@ -34,7 +34,7 @@ class Notes
 				name: @dom.name.val()
 				text: @dom.text.val()
 			if @dom.id.val().length then data.id = @dom.id.val()
-			($.ajax '/modules/notes/add-or-edit',
+			($.ajax window.hq.config.rootPath + 'modules/notes/add-or-edit',
 				type: 'POST'
 				dataType: 'json'
 				data: data
@@ -62,7 +62,7 @@ class Notes
 
 	refresh: (noteName) =>
 		@overlay yes
-		($.ajax '/modules/notes/notes',
+		($.ajax window.hq.config.rootPath + 'modules/notes/notes',
 			type: 'GET'
 			dataType: 'json'
 		).done((data) =>
@@ -85,11 +85,11 @@ class Notes
 						line.append $('<td>').css('cursor', 'pointer').attr('title', 'edit').text(n.name).click(((n) =>
 							() => @editNote n
 						)(n))
-						imgDel = $('<img>').attr('title', 'delete').attr('src', '/img/cross.png').css 'cursor', 'pointer'
+						imgDel = $('<img>').attr('title', 'delete').attr('src', window.hq.config.rootPath + 'img/cross.png').css 'cursor', 'pointer'
 						imgDel.click(((n) =>
 							() => if confirm 'Are you sure?' then @delNote n
 						)(n))
-						imgEdit = $('<img>').attr('title', 'edit').attr('src', '/img/pencil.png').css 'cursor', 'pointer'
+						imgEdit = $('<img>').attr('title', 'edit').attr('src', window.hq.config.rootPath + 'img/pencil.png').css 'cursor', 'pointer'
 						imgEdit.click(((n) =>
 							() => @editNote n
 						)(n))
@@ -108,7 +108,7 @@ class Notes
 
 	delNote: (note) =>
 		@overlay yes
-		($.ajax '/modules/notes/del',
+		($.ajax window.hq.config.rootPath + 'modules/notes/del',
 			type: 'POST'
 			dataType: 'json'
 			data:

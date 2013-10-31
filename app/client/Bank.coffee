@@ -37,7 +37,7 @@ class Bank
 
 		@dom.matchAll.click () =>
 			@overlay yes
-			($.ajax '/modules/bank/match-all',
+			($.ajax window.hq.config.rootPath + 'modules/bank/match-all',
 				type: 'GET'
 				dataType: 'json'
 			).done((data) =>
@@ -64,7 +64,7 @@ class Bank
 		@dom.form.hide()
 		@dom.info.hide()
 		@getFutureTransactions () =>
-			($.ajax '/modules/bank/unmatched-transactions',
+			($.ajax window.hq.config.rootPath + 'modules/bank/unmatched-transactions',
 				type: 'GET'
 				dataType: 'json'
 			).done((data) =>
@@ -74,7 +74,7 @@ class Bank
 						@overlay no
 					else
 						unmatched = data.transactions
-						($.ajax '/modules/bank/matched-transactions',
+						($.ajax window.hq.config.rootPath + 'modules/bank/matched-transactions',
 							type: 'GET'
 							dataType: 'json'
 						).done((data) =>
@@ -166,7 +166,7 @@ class Bank
 			@dom.infoDescription.text (if tr.futureTransaction.description then tr.futureTransaction.description else '(no description)')
 			@dom.infoUnmatch.off('click').click () =>
 				@overlay yes
-				($.ajax '/modules/bank/unmatch',
+				($.ajax window.hq.config.rootPath + 'modules/bank/unmatch',
 					type: 'POST'
 					dataType: 'json'
 					data:
@@ -196,7 +196,7 @@ class Bank
 				@dom.select.val(0)
 			@dom.form.off('submit').submit () =>
 				@overlay yes
-				($.ajax '/modules/bank/match',
+				($.ajax window.hq.config.rootPath + 'modules/bank/match',
 					type: 'POST'
 					dataType: 'json'
 					data:
@@ -221,7 +221,7 @@ class Bank
 
 	getFutureTransactions: (done) =>
 		@overlay yes
-		($.ajax '/modules/future-transactions/unmatched',
+		($.ajax window.hq.config.rootPath + 'modules/future-transactions/unmatched',
 			type: 'GET'
 			dataType: 'json'
 		).done((data) =>

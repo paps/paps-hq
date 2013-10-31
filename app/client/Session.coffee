@@ -48,7 +48,7 @@ class Session
 					@showRefreshCounter()
 			), 10000
 
-		($.ajax '/modules/session/my-configuration',
+		($.ajax window.hq.config.rootPath + 'modules/session/my-configuration',
 			type: 'GET'
 			dataType: 'json'
 		).done((data) =>
@@ -79,7 +79,7 @@ class Session
 				if window.hq[m].isVisible()
 					if modules.length then modules += ','
 					modules += m
-			($.ajax '/modules/session/save-configuration',
+			($.ajax window.hq.config.rootPath + 'modules/session/save-configuration',
 				type: 'POST'
 				dataType: 'json'
 				data:

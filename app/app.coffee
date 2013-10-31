@@ -60,6 +60,7 @@ app.use flash()
 # adding useful variables for the view
 app.use (req, res, next) ->
 	res.locals.user = req.user
+	res.locals.rootPath = config.rootPath
 	next()
 
 # request routing

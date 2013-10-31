@@ -1,15 +1,15 @@
 .moduleDiv
     h6.subheader.moduleHead#budgetHeader
         .moduleIcon
-            img(src="/img/chart_bar.png", alt="")
+            img(src="#{rootPath}img/chart_bar.png", alt="")
         .moduleButtons
-            img#budgetDoc(src="/img/book.png", alt="", title="documentation")
+            img#budgetDoc(src="#{rootPath}img/book.png", alt="", title="documentation")
             | 
-            img#budgetPrivacy(src="/img/eye.png", alt="", title="toggle privacy mode")
+            img#budgetPrivacy(src="#{rootPath}img/eye.png", alt="", title="toggle privacy mode")
             | 
-            img#budgetAtm(src="/img/server_delete.png", alt="", title="disable atm distribution (currently on)")
+            img#budgetAtm(src="#{rootPath}img/server_delete.png", alt="", title="disable atm distribution (currently on)")
             | 
-            img#budgetRefresh(src="/img/arrow_refresh.png", alt="", title="refresh")
+            img#budgetRefresh(src="#{rootPath}img/arrow_refresh.png", alt="", title="refresh")
         | Budget
     .moduleContent#budgetContent
         pre.moduleAlert#budgetAlertBox
@@ -25,15 +25,15 @@
                     |  &rarr; 
                     span#budgetPeriodEnd
             .small-3.columns(style="font-family: Monospace;")
-                img(src="/img/money.png", alt="", title="income")
+                img(src="#{rootPath}img/money.png", alt="", title="income")
                 | &nbsp;+
                 span#budgetIncome
                 | <br />
-                img(src="/img/cart.png", alt="", title="spending")
+                img(src="#{rootPath}img/cart.png", alt="", title="spending")
                 | &nbsp;-
                 span#budgetSpending
                 | <br />
-                img(src="/img/bullet_go.png", alt="", title="profit")
+                img(src="#{rootPath}img/bullet_go.png", alt="", title="profit")
                 | &nbsp;
                 strong#budgetProfit
             .small-4.columns#budgetInfo(style="font-size: small;")

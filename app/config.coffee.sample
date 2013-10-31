@@ -8,6 +8,7 @@ module.exports =
 	password: '' # generate password here
 	secret: '' # generate secret here
 	notifyOnStart: yes
+	rootPath: '/'
 
 	bank:
 		password: '' # generate password here

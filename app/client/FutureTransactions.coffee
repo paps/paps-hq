@@ -54,7 +54,7 @@ class FutureTransactions
 				tag: tag
 				doNotMatch: if @dom.dnm.is ':checked' then 1 else 0
 			if @dom.id.val().length then data.id = @dom.id.val()
-			($.ajax '/modules/future-transactions/transaction/add-or-edit',
+			($.ajax window.hq.config.rootPath + 'modules/future-transactions/transaction/add-or-edit',
 				type: 'POST'
 				dataType: 'json'
 				data: data
@@ -76,7 +76,7 @@ class FutureTransactions
 
 		@dom.del.click () =>
 			@overlay yes
-			($.ajax '/modules/future-transactions/transaction/del',
+			($.ajax window.hq.config.rootPath + 'modules/future-transactions/transaction/del',
 				type: 'POST'
 				dataType: 'json'
 				data:
@@ -107,7 +107,7 @@ class FutureTransactions
 
 	refresh: () =>
 		@overlay yes
-		($.ajax '/modules/future-transactions/transactions',
+		($.ajax window.hq.config.rootPath + 'modules/future-transactions/transactions',
 			type: 'GET'
 			dataType: 'json'
 		).done((data) =>
@@ -138,7 +138,7 @@ class FutureTransactions
 						line.append $('<td>').css('text-align', 'right').append label
 						line.append $('<td>').css('color', '#777').css('text-align', 'center').text window.hq.utils.dateToStr transaction.date, yes
 						line.append $('<td>').text transaction.description
-						pencil = $('<img>').css('cursor', 'pointer').attr('src', '/img/pencil.png').attr('title', 'edit').attr 'alt', ''
+						pencil = $('<img>').css('cursor', 'pointer').attr('src', window.hq.config.rootPath + 'img/pencil.png').attr('title', 'edit').attr 'alt', ''
 						line.append $('<td>').append pencil
 						pencil.click(((transaction) =>
 							() =>

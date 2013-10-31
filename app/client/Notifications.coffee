@@ -20,7 +20,7 @@ class Notifications
 
 	refresh: () =>
 		@overlay yes
-		($.ajax '/modules/notifications/notifications',
+		($.ajax window.hq.config.rootPath + 'modules/notifications/notifications',
 			type: 'GET'
 			dataType: 'json'
 		).done((data) =>
@@ -40,10 +40,10 @@ class Notifications
 							@dom.table.append $('<tr>').append $('<td>').attr('colspan', 5).css('background-color', '#ccc').css('padding', '0px').css 'height', '7px'
 						if window.hq.config.notifications.knownTypes[n.type]
 							title = n.type
-							icon = '/img/' + window.hq.config.notifications.knownTypes[n.type]
+							icon = window.hq.config.rootPath + 'img/' + window.hq.config.notifications.knownTypes[n.type]
 						else
 							title = n.type + ' (unknown type)'
-							icon = '/img/' + window.hq.config.notifications.unknownType
+							icon = window.hq.config.rootPath + 'img/' + window.hq.config.notifications.unknownType
 						line = $('<tr>').attr 'title', title + (if n.read then ' (read)' else ' (unread)')
 						if n.read then line.css 'text-decoration', 'line-through'
 						label = $('<span>').addClass('label round').css('background-color', 'rgb(' + n.r + ',' + n.g + ',' + n.b + ')').html '&times;' + n.count
@@ -51,11 +51,11 @@ class Notifications
 						line.append $('<td>').css('color', '#777').css('text-align', 'center').text window.hq.utils.dateToStr n.date, yes
 						line.append $('<td>').css('text-align', 'right').append $('<img>').attr('alt', '').attr 'src', icon
 						line.append $('<td>').text n.text
-						imgChangeRead = $('<img>').attr('alt', '').attr('title', 'mark as ' + (if n.read then 'un' else '') + 'read').attr('src', '/img/' + (if n.read then 'arrow_undo' else 'tick') + '.png').css 'cursor', 'pointer'
+						imgChangeRead = $('<img>').attr('alt', '').attr('title', 'mark as ' + (if n.read then 'un' else '') + 'read').attr('src', window.hq.config.rootPath + 'img/' + (if n.read then 'arrow_undo' else 'tick') + '.png').css 'cursor', 'pointer'
 						imgChangeRead.click(((n) =>
 							() =>
 								@overlay yes
-								($.ajax '/modules/notifications/mark-read',
+								($.ajax window.hq.config.rootPath + 'modules/notifications/mark-read',
 									type: 'POST'
 									dataType: 'json'
 									data:
@@ -84,7 +84,7 @@ class Notifications
 						markAllAsRead = $('<button>').addClass('small').css('margin-bottom', '2px').text 'Mark all as read'
 						markAllAsRead.click () =>
 							@overlay yes
-							($.ajax '/modules/notifications/mark-all-as-read',
+							($.ajax window.hq.config.rootPath + 'modules/notifications/mark-all-as-read',
 								type: 'POST'
 								dataType: 'json'
 							).done((data) =>

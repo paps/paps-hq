@@ -69,11 +69,11 @@ class Budget
 			if @distributeAtm
 				@distributeAtm = no
 				@dom.atm.attr 'title', 'enable atm distribution (currently off)'
-				@dom.atm.attr 'src', '/img/server_go.png'
+				@dom.atm.attr 'src', window.hq.config.rootPath + 'img/server_go.png'
 			else
 				@distributeAtm = yes
 				@dom.atm.attr 'title', 'disable atm distribution (currently on)'
-				@dom.atm.attr 'src', '/img/server_delete.png'
+				@dom.atm.attr 'src', window.hq.config.rootPath + 'img/server_delete.png'
 			@refresh()
 			e.stopPropagation()
 
@@ -279,7 +279,7 @@ class Budget
 		if @balanceChart
 			@balanceChart.destroy()
 			@balanceChart = null
-		($.ajax '/modules/budget/period',
+		($.ajax window.hq.config.rootPath + 'modules/budget/period',
 			type: 'GET'
 			dataType: 'json'
 			data:

@@ -20,7 +20,7 @@ class Wallets
 
 	refresh: () =>
 		@overlay yes
-		($.ajax '/modules/wallets/latest',
+		($.ajax window.hq.config.rootPath + 'modules/wallets/latest',
 			type: 'GET'
 			dataType: 'json'
 		).done((data) =>
@@ -31,7 +31,7 @@ class Wallets
 					@dom.table.empty()
 					for currency in data.wallets
 						header = $('<td>').attr('colspan', 4).text ' ' + currency.currency
-						header.prepend $('<img>').attr('src', '/img/' + currency.icon + '.png')
+						header.prepend $('<img>').attr('src', window.hq.config.rootPath + 'img/' + currency.icon + '.png')
 						@dom.table.append $('<tr>').css('border-bottom', '1px solid #ccc').css('height', '27px').css('font-weight', 'bold').append header
 						total = 0
 						for wallet in currency.wallets
@@ -44,11 +44,11 @@ class Wallets
 							error = wallet.error
 							if not error and not wallet.amount then error = 'amount not fetched yet'
 							if error
-								amountCell.append $('<img>').attr('src', '/img/exclamation.png')
+								amountCell.append $('<img>').attr('src', window.hq.config.rootPath + 'img/exclamation.png')
 								amountCell.attr 'title', error
 							line.append amountCell
 							line.append $('<td>').attr('title', wallet.address).text wallet.address.substr(0, 6) + '...' + wallet.address.substr(-6)
-							line.append $('<td>').css('text-align', 'right').append $('<a>').attr('title', 'view ' + wallet.address + ' in a chain explorer').attr('href', wallet.humanUrl).attr('target', '_blank').append $('<img>').attr('src', '/img/zoom.png')
+							line.append $('<td>').css('text-align', 'right').append $('<a>').attr('title', 'view ' + wallet.address + ' in a chain explorer').attr('href', wallet.humanUrl).attr('target', '_blank').append $('<img>').attr('src', window.hq.config.rootPath + 'img/zoom.png')
 							@dom.table.append line
 						totalTr = $('<tr>')
 						totalTr.append $('<td>').css('text-align', 'right').css('font-weight', 'bold').text '= '

@@ -1,13 +1,13 @@
 .moduleDiv
     h6.subheader.moduleHead#futureTransactionsHeader
         .moduleIcon
-            img(src="/img/money.png", alt="")
+            img(src="#{rootPath}img/money.png", alt="")
         .moduleButtons
-            img#futureTransactionsDoc(src="/img/book.png", alt="", title="documentation")
+            img#futureTransactionsDoc(src="#{rootPath}img/book.png", alt="", title="documentation")
             | 
-            img#futureTransactionsClearForm(src="/img/bin.png", alt="", title="clear form")
+            img#futureTransactionsClearForm(src="#{rootPath}img/bin.png", alt="", title="clear form")
             | 
-            img#futureTransactionsRefresh(src="/img/arrow_refresh.png", alt="", title="refresh")
+            img#futureTransactionsRefresh(src="#{rootPath}img/arrow_refresh.png", alt="", title="refresh")
         | Transactions
     .moduleContent#futureTransactionsContent
         pre.moduleAlert#futureTransactionsAlertBox
@@ -16,7 +16,7 @@
                 .small-3.columns
                     label
                         | ID 
-                        img#futureTransactionsClearId(src="/img/bin.png", alt="", title="clear id field")
+                        img#futureTransactionsClearId(src="#{rootPath}img/bin.png", alt="", title="clear id field")
                     input#futureTransactionsId(type="text", disabled)
                 .small-4.columns
                     label(for="futureTransactionsAmount") Amount

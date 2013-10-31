@@ -20,7 +20,7 @@ class Mining
 
 	refresh: () =>
 		@overlay yes
-		($.ajax '/modules/mining/latest',
+		($.ajax window.hq.config.rootPath + 'modules/mining/latest',
 			type: 'GET'
 			dataType: 'json'
 		).done((data) =>
@@ -39,7 +39,7 @@ class Mining
 						if (Array.isArray miner?.status?.STATUS) and miner?.status?.STATUS.length > 0
 							s = miner.status.STATUS[0]
 							header.append ' - ' + s.Msg + s.Description
-						link = $('<div>').css('float', 'right').append $('<img>').attr('src', '/img/transmit.png')
+						link = $('<div>').css('float', 'right').append $('<img>').attr('src', window.hq.config.rootPath + 'img/transmit.png')
 						age = Math.round(((new Date).getTime() / 1000) - miner.notificator.update)
 						if miner.notificator.consideredDown
 							if age < 120
@@ -49,7 +49,7 @@ class Mining
 							else
 								age = '' + Math.round(age / (60 * 60)) + 'h'
 							link.append $('<strong>').css('color', '#C60F13').text ' down for ' + age + ' '
-							link.append $('<img>').attr('src', '/img/exclamation.png')
+							link.append $('<img>').attr('src', window.hq.config.rootPath + 'img/exclamation.png')
 							link.attr 'title', name + ' is not sending updates'
 						else
 							link.append ' ' + (if age < 0 then 0 else age) + 's'
@@ -67,7 +67,7 @@ class Mining
 									else
 										bullet = 'green'
 							line = $('<tr>')
-							line.append $('<td>').append $('<img>').attr 'src', '/img/bullet_' + bullet + '.png'
+							line.append $('<td>').append $('<img>').attr 'src', window.hq.config.rootPath + 'img/bullet_' + bullet + '.png'
 							line.append $('<td>').text '[' + d['GPU'] + ']'
 							line.append $('<td>').text d['Temperature'] + '°'
 							line.append $('<td>').text d['Fan Speed'] + ' (' + d['Fan Percent'] + '%)'

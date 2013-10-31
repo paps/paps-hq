@@ -1,5 +1,7 @@
 window.hq =
 	config:
+		rootPath: '/'
+
 		session:
 			modules:
 				all: ['notifications', 'bank', 'futureTransactions', 'budget',
