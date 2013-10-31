@@ -5,7 +5,7 @@ module.exports = (app) ->
 
 	app.get '/', (req, res) ->
 		if req.user
-			res.redirect '/dashboard'
+			res.redirect app.config.rootPath + 'dashboard'
 		else
 			if req.session.returnTo
 				req.flash 'error', 'you must be logged in to view this page'
@@ -15,17 +15,17 @@ module.exports = (app) ->
 				infos: req.flash 'info'
 
 	app.post '/login', passport.authenticate 'local',
-		successRedirect: '/dashboard'
-		failureRedirect: '/'
+		successRedirect: app.config.rootPath + 'dashboard'
+		failureRedirect: app.config.rootPath
 		failureFlash: true
 
 	app.get '/logout', (ensureLoggedIn '/'), (req, res) ->
 		req.logout()
 		req.flash 'info', 'you have logged out'
-		res.redirect '/'
+		res.redirect app.config.rootPath
 
 	app.get '/logout-all', (ensureLoggedIn '/'), (req, res) ->
 		req.logout()
 		req.flash 'info', 'you have logged out and all sessions were deleted'
-		res.redirect '/'
+		res.redirect app.config.rootPath
 		setTimeout (() -> app.sessionStore.clear()), 1000
