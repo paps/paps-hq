@@ -45,7 +45,8 @@ app.use express.static __dirname + '/public'
 
 # session & request handling
 app.use express.logger()
-app.use express.bodyParser()
+app.use express.json()
+app.use express.urlencoded()
 app.use express.methodOverride()
 app.use express.cookieParser()
 app.use express.session
