@@ -1,6 +1,6 @@
 window.hq =
 	config:
-		rootPath: '/'
+		rootPath: '/hq/' # with terminating slash
 
 		session:
 			modules:
