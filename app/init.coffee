@@ -15,4 +15,5 @@ module.exports = (app) ->
 
 	Wallets = (require __dirname + '/lib/Wallets') app
 	app.hq.wallets = new Wallets
-	app.hq.wallets.checkLater(app.config.wallets.firstCheck)
+	if app.config.wallets.enabled
+		app.hq.wallets.checkLater(app.config.wallets.firstCheck)

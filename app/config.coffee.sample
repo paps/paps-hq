@@ -4,7 +4,7 @@ module.exports =
 	login: 'paps'
 	password: '' # generate password here
 	secret: '' # generate cookie/session secret here
-	notifyOnStart: yes
+	notifyOnStart: no
 	rootPath: '/' # with terminating slash
 	sessionDuration: 24 * 15 # hours
 	secureCookie: no
@@ -32,12 +32,13 @@ module.exports =
 
 	mining:
 		password: '' # generate password here
-		checkInterval: 60 # seconds
-		allowedDowntime: 60 # seconds
+		checkInterval: 2.1 * 60 # seconds
+		allowedDowntime: 2.5 * 60 # seconds
 
 	wallets:
-		checkInterval: 60 * 60 # seconds
-		firstCheck: 3 * 60 # seconds
+		enabled: no
+		checkInterval: 60 * 68.73 # seconds
+		firstCheck: 1 * 60 # seconds
 		list: [
 			{
 				currency: 'Bitcoin'
