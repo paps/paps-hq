@@ -40,7 +40,7 @@ class Mining
 							s = miner.status.STATUS[0]
 							header.append ' - ' + s.Msg + s.Description
 						link = $('<div>').css('float', 'right').append $('<img>').attr('src', window.hq.config.rootPath + 'img/transmit.png')
-						age = Math.round(window.hq.utils.now() - miner.notificator.update)
+						age = miner.notificator.timeSinceUpdate
 						if miner.notificator.consideredDown
 							if age < 120
 								age = '' + (if age < 0 then 0 else age) + 's'

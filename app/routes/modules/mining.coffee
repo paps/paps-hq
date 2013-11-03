@@ -2,6 +2,8 @@ ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn
 
 module.exports = (app) ->
 
+	utils = require __dirname + '/../../lib/utils'
+
 	app.post '/modules/mining/update', (req, res) ->
 		if (req.param 'password') isnt app.config.mining.password
 			res.json errors: ['incorrect password']
@@ -25,6 +27,9 @@ module.exports = (app) ->
 			res.json errors: []
 
 	app.get '/modules/mining/latest', (ensureLoggedIn app.config.rootPath), (req, res) ->
+		for name, miner of app.hq.mining.miners
+			if miner?.notificator?.update
+				miner.notificator.timeSinceUpdate = utils.now() - miner.notificator.update
 		res.json
 			errors: []
 			miners: app.hq.mining.miners

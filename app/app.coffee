@@ -89,4 +89,4 @@ app.use express.errorHandler
 (require __dirname + '/init') app
 
 # start!
-app.listen config.port, () -> console.log 'listening on ' + config.port
+app.listen config.port, 'localhost', () -> console.log 'listening on ' + config.port

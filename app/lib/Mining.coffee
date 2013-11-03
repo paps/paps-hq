@@ -46,5 +46,5 @@ module.exports = (app) ->
 					age = utils.now() - n.update
 					if age > @cfg.allowedDowntime
 						n.consideredDown = yes
-						addNotification 'mining', 'No updates from ' + name + ' for more than ' + Math.round(age) + 's', 165, 42, 42, '*'
+						addNotification 'mining', 'No updates from ' + name + ' for more than ' + Math.round(age / 60) + 'm', 165, 42, 42, '*'
 			@checkLater()
