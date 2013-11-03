@@ -1,13 +1,12 @@
 module.exports = (app) ->
 
+	utils = require __dirname + '/../lib/utils'
 	addNotification = (require __dirname + '/../notificators/add') app
 
 	class Mining
 		constructor: () ->
 			@cfg = app.config.mining
 			@miners = {}
-
-		getTime: () -> Math.round((new Date).getTime() / 1000)
 
 		update: (name, status) =>
 			newMiner = no
@@ -19,7 +18,7 @@ module.exports = (app) ->
 			@miners[name].status = status
 			if @miners[name].notificator.consideredDown
 				addNotification 'mining', name + ' is back and sending updates', 141, 182, 0, '*'
-			@miners[name].notificator.update = @getTime()
+			@miners[name].notificator.update = utils.now()
 			@miners[name].notificator.consideredDown = no
 			aliveDevices = 0
 			hardwareErrors = 0
@@ -44,7 +43,7 @@ module.exports = (app) ->
 			for name, miner of @miners
 				n = miner.notificator
 				if not n.consideredDown
-					age = @getTime() - n.update
+					age = utils.now() - n.update
 					if age > @cfg.allowedDowntime
 						n.consideredDown = yes
 						addNotification 'mining', 'No updates from ' + name + ' for more than ' + Math.round(age) + 's', 165, 42, 42, '*'

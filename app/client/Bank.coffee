@@ -139,11 +139,16 @@ class Bank
 										if maxDate < tr.date
 											maxDate = tr.date
 											balance = tr.balance
-									@dom.balanceCurrent.text Math.round(balance * 100) / 100
+									@dom.balanceCurrent.text window.hq.utils.round balance, 2
 									projectionTitle = 'adding ' + @projectionAdd + ' from ' + @projectionAddNb + ' transaction' + (if @projectionAddNb > 1 then 's' else '') +
 										', and subtracting ' + (@projectionSub * -1) + ' from ' + @projectionSubNb + ' transaction' + (if @projectionSubNb > 1 then 's' else '')
 									@dom.balance.attr 'title', projectionTitle
-									@dom.balanceProjection.text Math.round((balance + @projectionAdd + @projectionSub) * 100) / 100
+									projection = balance + @projectionAdd + @projectionSub
+									if projection <= 500
+										@dom.balance.projection.css 'color', '#C60F13'
+									else
+										@dom.balance.projection.css 'color', 'black'
+									@dom.balanceProjection.text window.hq.utils.round projection, 2
 									header.text unmatched.length + ' unmatched, also showing ' + matched.length + ' matched (including ' + nbConsideredMatched + ' considered matched)'
 							else
 								@error 'malformed json reply while fetching matched transactions'
@@ -246,8 +251,8 @@ class Bank
 							++@projectionSubNb
 						if not tr.doNotMatch
 							@dom.select.append $('<option>').val(tr.id).text (@getFutureTransactionText tr)
-					@projectionAdd = Math.round(@projectionAdd * 100) / 100
-					@projectionSub = Math.round(@projectionSub * 100) / 100
+					@projectionAdd = window.hq.utils.round @projectionAdd, 2
+					@projectionSub = window.hq.utils.round @projectionSub, 2
 					if done then done() else @overlay no
 			else
 				@error 'malformed json reply while fetching unmatched future transactions'

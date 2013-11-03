@@ -83,14 +83,12 @@ class Budget
 			e.stopPropagation()
 
 	addMonthsToDate: (from, months) =>
-		date = new Date
-		date.setTime from.getTime() + 1000 * 60 * 60 * 24 * 32 * months
+		date = new Date(from.getTime() + 1000 * 60 * 60 * 24 * 32 * months)
 		date = new Date date.getFullYear(), date.getMonth()
 		date.setTime date.getTime() - 1000 * 10
 		return date
 
-	round: (v) ->
-		Math.round(v * 100) / 100
+	round: (v) -> window.hq.utils.round v, 2
 
 	computeAtm: (spending) =>
 		if spending.atm
@@ -224,7 +222,7 @@ class Budget
 		spending = {}
 		balanceOverTime = {}
 		for tr in transactions
-			day = new Date tr.date * 1000
+			day = window.hq.utils.dateFromTimestamp tr.date
 			day = Date.UTC day.getFullYear(), day.getMonth(), day.getDate()
 			if startBalance is null
 				startBalance = tr.balance - tr.amount

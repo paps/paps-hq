@@ -40,7 +40,7 @@ class Mining
 							s = miner.status.STATUS[0]
 							header.append ' - ' + s.Msg + s.Description
 						link = $('<div>').css('float', 'right').append $('<img>').attr('src', window.hq.config.rootPath + 'img/transmit.png')
-						age = Math.round(((new Date).getTime() / 1000) - miner.notificator.update)
+						age = Math.round(window.hq.utils.now() - miner.notificator.update)
 						if miner.notificator.consideredDown
 							if age < 120
 								age = '' + (if age < 0 then 0 else age) + 's'
@@ -79,7 +79,7 @@ class Mining
 							@dom.table.append line
 					@dom.summary.empty()
 					if nbMiners
-						@dom.summary.text (Math.round(totalMh * 100) / 100) + ' mh/s with ' + nbMiners + ' miner' + (if nbMiners > 1 then 's' else '') + ' (' + nbDevices + ' device' + (if nbDevices > 1 then 's' else '') + ').'
+						@dom.summary.text (window.hq.utils.round totalMh, 2) + ' mh/s with ' + nbMiners + ' miner' + (if nbMiners > 1 then 's' else '') + ' (' + nbDevices + ' device' + (if nbDevices > 1 then 's' else '') + ').'
 					else
 						@dom.summary.text 'No updates received from miners yet.'
 			else

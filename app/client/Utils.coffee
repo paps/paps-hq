@@ -17,4 +17,10 @@ class Utils
 			ret += ', ' + (if date.getHours() < 10 then '0' else '') + date.getHours() + ':' + (if date.getMinutes() < 10 then '0' else '') + date.getMinutes()
 		return ret
 
+	dateFromTimestamp: (timestamp) -> new Date timestamp * 1000
+
+	round: (n, decimals) -> (Math.round n * Math.pow(10, decimals)) / (Math.pow 10, decimals)
+
+	now: () -> Math.round(Date.now() / 1000)
+
 $ -> window.hq.utils = new Utils

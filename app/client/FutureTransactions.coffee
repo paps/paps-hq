@@ -146,7 +146,7 @@ class FutureTransactions
 								@dom.description.val transaction.description
 								@dom.amount.val transaction.amount
 								@dom.dnm.prop 'checked', transaction.doNotMatch
-								d = new Date transaction.date * 1000
+								d = window.hq.utils.dateFromTimestamp transaction.date
 								@dom.date.val (if d.getDate() < 10 then '0' else '') + d.getDate() + '/' + (if d.getMonth() + 1 < 10 then '0' else '') + (d.getMonth() + 1) + '/' + d.getFullYear()
 								@dom.time.val (if d.getHours() < 10 then '0' else '') + d.getHours() + (if d.getMinutes() < 10 then '0' else '') + d.getMinutes()
 								@deselectTags()

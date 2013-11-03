@@ -39,7 +39,7 @@ class Wallets
 							line.append $('<td>').text wallet.name
 							amountCell = $('<td>')
 							if wallet.amount
-								amountCell.text (Math.round(wallet.amount * 10000) / 10000) + ' ' + currency.symbol + ' '
+								amountCell.text (window.hq.utils.round wallet.amount, 4) + ' ' + currency.symbol + ' '
 								total += wallet.amount
 							error = wallet.error
 							if not error and not wallet.amount then error = 'amount not fetched yet'
@@ -52,7 +52,7 @@ class Wallets
 							@dom.table.append line
 						totalTr = $('<tr>')
 						totalTr.append $('<td>').css('text-align', 'right').css('font-weight', 'bold').text '= '
-						totalTr.append $('<td>').text (Math.round(total * 10000) / 10000) + ' ' + currency.symbol
+						totalTr.append $('<td>').text (window.hq.utils.round total, 4) + ' ' + currency.symbol
 						totalTr.append $('<td>')
 						totalTr.append $('<td>')
 						@dom.table.append totalTr

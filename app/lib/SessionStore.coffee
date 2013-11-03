@@ -1,9 +1,9 @@
 module.exports = (db) ->
 
+	utils = require __dirname + '/utils'
+
 	class SessionStore extends require('express').session.Store
 		constructor: (options) ->
-
-		@now: () -> Math.round(Date.now() / 1000)
 
 		get: (sid, done) ->
 			db.query 'SELECT data FROM sessions WHERE id = ?',
@@ -24,7 +24,7 @@ module.exports = (db) ->
 			try
 				data = JSON.stringify data
 				db.query 'REPLACE INTO sessions(id, data, date) VALUES(?, ?, ?)',
-					[sid, data, SessionStore.now()],
+					[sid, data, utils.now()],
 					(err, res) ->
 						if err
 							if done then done err.toString()

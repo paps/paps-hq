@@ -3,6 +3,7 @@ request = require 'request'
 
 module.exports = (app) ->
 
+	utils = require __dirname + '/utils'
 	addNotification = (require __dirname + '/../notificators/add') app
 
 	class Wallets
@@ -29,9 +30,9 @@ module.exports = (app) ->
 									diff = Math.abs(amount - wallet.amount)
 									if diff isnt 0
 										msg = currency.currency + ' wallet "' + wallet.name + '" has ' + (if diff < 0 then 'sent' else 'received') + ' '
-										msg += (Math.round(diff * 10000) / 10000)
+										msg += utils.round diff, 4
 										msg += ' ' + currency.symbol + ', '
-										msg += 'balance is now ' + (Math.round(amount * 10000) / 10000) + ' ' + currency.symbol
+										msg += 'balance is now ' + (utils.round amount, 4) + ' ' + currency.symbol
 										addNotification 'wallet', msg, 113, 188, 120, '*'
 								wallet.amount = amount
 								wallet.error = null
