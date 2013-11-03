@@ -24,7 +24,7 @@ module.exports = (app) ->
 			app.hq.mining.update miner, status
 			res.json errors: []
 
-	app.get '/modules/mining/latest', (ensureLoggedIn '/'), (req, res) ->
+	app.get '/modules/mining/latest', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		res.json
 			errors: []
 			miners: app.hq.mining.miners

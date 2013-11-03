@@ -4,7 +4,7 @@ module.exports = (app) ->
 
 	Transaction = (require __dirname + '/../../models/Transaction') app.db
 
-	app.get '/modules/budget/period', (ensureLoggedIn '/'), (req, res) ->
+	app.get '/modules/budget/period', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		(req.assert 'start', 'invalid start date').isInt().min 0
 		(req.assert 'end', 'invalid end date').isInt().min 0
 		errors = req.validationErrors() or []

@@ -19,12 +19,12 @@ module.exports = (app) ->
 		failureRedirect: app.config.rootPath
 		failureFlash: true
 
-	app.get '/logout', (ensureLoggedIn '/'), (req, res) ->
+	app.get '/logout', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		req.logout()
 		req.flash 'info', 'you have logged out'
 		res.redirect app.config.rootPath
 
-	app.get '/logout-all', (ensureLoggedIn '/'), (req, res) ->
+	app.get '/logout-all', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		req.logout()
 		req.flash 'info', 'you have logged out and all sessions were deleted'
 		res.redirect app.config.rootPath

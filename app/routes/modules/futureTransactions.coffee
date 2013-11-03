@@ -4,19 +4,19 @@ module.exports = (app) ->
 
 	FutureTransaction = (require __dirname + '/../../models/FutureTransaction') app.db
 
-	app.get '/modules/future-transactions/transactions', (ensureLoggedIn '/'), (req, res) ->
+	app.get '/modules/future-transactions/transactions', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		FutureTransaction.getLast (err, transactions) ->
 			res.json
 				errors: if err then [err] else []
 				transactions: transactions
 
-	app.get '/modules/future-transactions/unmatched', (ensureLoggedIn '/'), (req, res) ->
+	app.get '/modules/future-transactions/unmatched', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		FutureTransaction.getUnmatched (err, transactions) ->
 			res.json
 				errors: if err then [err] else []
 				transactions: transactions
 
-	app.post '/modules/future-transactions/transaction/add-or-edit', (ensureLoggedIn '/'), (req, res) ->
+	app.post '/modules/future-transactions/transaction/add-or-edit', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		(req.assert 'amount', 'invalid amount').isDecimal()
 		(req.assert 'date', 'invalid date').isInt()
 		(req.assert 'doNotMatch', 'invalid DNM flag').isInt()
@@ -41,7 +41,7 @@ module.exports = (app) ->
 				FutureTransaction.insert (req.param 'amount'), (req.param 'description'), (req.param 'date'), (req.param 'tag'), dnm,
 					(err) -> res.json errors: if err then [err] else []
 
-	app.post '/modules/future-transactions/transaction/del', (ensureLoggedIn '/'), (req, res) ->
+	app.post '/modules/future-transactions/transaction/del', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		(req.assert 'id', 'invalid id').isInt()
 		errors = req.validationErrors() or []
 		if errors.length

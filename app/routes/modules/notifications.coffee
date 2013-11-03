@@ -5,7 +5,7 @@ module.exports = (app) ->
 	Notification = (require __dirname + '/../../models/Notification') app.db
 	addNotification = (require __dirname + '/../../notificators/add') app
 
-	app.get '/modules/notifications/notifications', (ensureLoggedIn '/'), (req, res) ->
+	app.get '/modules/notifications/notifications', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		Notification.getLast (err, notifications) ->
 			res.json
 				errors: if err then [err] else []
@@ -20,11 +20,11 @@ module.exports = (app) ->
 					errors: if err then [err] else []
 					notifications: notifications
 
-	app.post '/modules/notifications/mark-all-as-read', (ensureLoggedIn '/'), (req, res) ->
+	app.post '/modules/notifications/mark-all-as-read', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		Notification.markAllAsRead (err) ->
 			res.json errors: if err then [err] else []
 
-	app.post '/modules/notifications/mark-read', (ensureLoggedIn '/'), (req, res) ->
+	app.post '/modules/notifications/mark-read', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		(req.assert 'id', 'invalid notification id').isInt()
 		(req.assert 'read', 'invalid read integer (1 or 0, please)').isInt().min(0).max(1)
 		errors = req.validationErrors() or []

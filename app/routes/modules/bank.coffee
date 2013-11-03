@@ -7,19 +7,19 @@ module.exports = (app) ->
 	Transaction = (require __dirname + '/../../models/Transaction') app.db
 	FutureTransaction = (require __dirname + '/../../models/FutureTransaction') app.db
 
-	app.get '/modules/bank/matched-transactions', (ensureLoggedIn '/'), (req, res) ->
+	app.get '/modules/bank/matched-transactions', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		Transaction.getLastMatched (err, transactions) ->
 			res.json
 				errors: if err then [err] else []
 				transactions: transactions
 
-	app.get '/modules/bank/unmatched-transactions', (ensureLoggedIn '/'), (req, res) ->
+	app.get '/modules/bank/unmatched-transactions', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		Transaction.getUnmatched (err, transactions) ->
 			res.json
 				errors: if err then [err] else []
 				transactions: transactions
 
-	app.post '/modules/bank/unmatch', (ensureLoggedIn '/'), (req, res) ->
+	app.post '/modules/bank/unmatch', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		(req.assert 'id', 'invalid transaction id').isInt()
 		errors = req.validationErrors() or []
 		if errors.length
@@ -28,7 +28,7 @@ module.exports = (app) ->
 			FutureTransaction.unmatch (req.param 'id'), (err) ->
 				res.json errors: if err then [err] else []
 
-	app.post '/modules/bank/match', (ensureLoggedIn '/'), (req, res) ->
+	app.post '/modules/bank/match', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		(req.assert 'id', 'invalid transaction id').isInt()
 		(req.assert 'futureTransactionId', 'invalid future transaction id').isInt()
 		errors = req.validationErrors() or []
@@ -90,7 +90,7 @@ module.exports = (app) ->
 							else
 								done null, nbMatched, transactions.length - nbMatched
 
-	app.get '/modules/bank/match-all', (ensureLoggedIn '/'), (req, res) ->
+	app.get '/modules/bank/match-all', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		matchAll (err, matched, unmatched) ->
 			if err
 				res.json errors: if err then [err] else []
