@@ -5,16 +5,13 @@ expressValidator = require 'express-validator'
 flash = require 'connect-flash'
 passport = require 'passport'
 LocalStrategy = require('passport-local').Strategy
-FileSessionStore = require 'connect-session-file'
 db = require 'any-db'
 
-express.application.db = db.createPool config.db[config.env],
+express.application.db = db.createPool config.db,
 	min: 1
 	max: 5
+SessionStore = (require __dirname + '/lib/SessionStore') express.application.db
 express.application.config = config
-express.application.sessionStore = new FileSessionStore
-	path: __dirname + '/sessions'
-	maxAge: 1000 * 60 * 60 * 24 * 45 # 45 days
 express.application.hq = {}
 
 app = express()
@@ -51,7 +48,12 @@ app.use express.methodOverride()
 app.use express.cookieParser()
 app.use express.session
 	secret: config.secret
-	store: app.sessionStore
+	store: new SessionStore
+	cookie:
+		path: '/'
+		httpOnly: yes
+		maxAge: 1000 * 60 * 60 * config.sessionDuration
+		secure: config.secureCookie
 app.use passport.initialize()
 app.use passport.session()
 app.use expressValidator()
@@ -67,15 +69,9 @@ app.use (req, res, next) ->
 app.use app.router
 
 # "catch all" error handler
-if config.env is 'dev'
-	app.use express.errorHandler
-		showStack: true
-		dumpExceptions: true
-else
-	app.use (err, req, res, next) ->
-		console.log (Error.toJson err)
-		res.status 500
-		res.render 'error'
+app.use express.errorHandler
+	showStack: true
+	dumpExceptions: true
 
 # route definitions
 (require __dirname + '/routes/login') app

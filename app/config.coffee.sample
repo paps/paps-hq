@@ -1,14 +1,13 @@
 module.exports =
-	env: 'dev' # dev/prod
 	port: 8090
-	db:
-		dev: 'sqlite3://app/db.sqlite'
-		prod: 'sqlite3://app/db.sqlite'
+	db: 'sqlite3://app/db.sqlite'
 	login: 'paps'
 	password: '' # generate password here
-	secret: '' # generate secret here
+	secret: '' # generate cookie/session secret here
 	notifyOnStart: yes
 	rootPath: '/' # with terminating slash
+	sessionDuration: 24 * 15 # hours
+	secureCookie: no
 
 	bank:
 		password: '' # generate password here

@@ -28,4 +28,4 @@ module.exports = (app) ->
 		req.logout()
 		req.flash 'info', 'you have logged out and all sessions were deleted'
 		res.redirect app.config.rootPath
-		setTimeout (() -> app.sessionStore.clear()), 1000
+		setTimeout (() -> req.sessionStore.clear()), 1000

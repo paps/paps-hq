@@ -23,33 +23,30 @@ module.exports = (db) ->
 		set: (sid, data, done) ->
 			try
 				data = JSON.stringify data
-			catch e
-				data = null
-			if not data
-				done 'no session data or stringify problem'
-			else
 				db.query 'REPLACE INTO sessions(id, data, date) VALUES(?, ?, ?)',
 					[sid, data, SessionStore.now()],
 					(err, res) ->
 						if err
-							done err.toString()
+							if done then done err.toString()
 						else
-							done()
+							if done then done()
+			catch e
+				if done then done e.toString()
 
 		destroy: (sid, done) ->
 			db.query 'DELETE FROM sessions WHERE id = ?',
 				[sid],
 				(err) ->
 					if err
-						done err.toString()
+						if done then done err.toString()
 					else
-						done()
+						if done then done()
 
 		clear: (done) ->
 			db.query 'DELETE FROM sessions',
 				[],
 				(err) ->
 					if err
-						done err.toString()
+						if done then done err.toString()
 					else
-						done()
+						if done then done()
