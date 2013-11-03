@@ -104,7 +104,7 @@ class Budget
 					spending[tag] = spent + atm * tagSize
 		return spending
 
-	buildSpendingChart: (spending, totalSpent) =>
+	buildSpendingChart: (spending) =>
 		if @distributeAtm then spending = @computeAtm(spending)
 		tags = []
 		values = []

@@ -22,10 +22,12 @@
                     label(for="futureTransactionsAmount") Amount
                     input#futureTransactionsAmount(type="text", required)
                 .small-5.columns
-                    label(for="futureTransactionsDate", style="float: left;") dd/mm/yyyy
-                    label(for="futureTransactionsTime", style="float: right;") hhmm
-                    input#futureTransactionsDate(type="text", style="width: 50%; float: left;", required)
-                    input#futureTransactionsTime(type="text", style="width: 40%; float: right;", required)
+                    div(style="float: left; width: 50%;")
+                        label(for="futureTransactionsDate") dd/mm/yyyy
+                        input#futureTransactionsDate(type="text", required)
+                    div(style="float: right; width: 40%;")
+                        label(for="futureTransactionsTime") hhmm
+                        input#futureTransactionsTime(type="text", required)
             .row
                 .small-2.columns
                     label.inline Tag

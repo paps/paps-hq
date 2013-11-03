@@ -85,7 +85,7 @@ class Bank
 									getNbUpdates = (nb) ->
 										span = $('<span>').css('font-weight', 'bold').attr('title', 'updated ' + (if nb > 1 then (nb + ' times') else 'once') + ' (the amount might be ' + (nb+1) + ' times higher)')
 										span.text nb + 'x'
-										span.append $('<img>').attr('src', window.hq.config.rootPath + 'img/page_edit.png').attr 'alt', ''
+										span.append $('<img>').attr 'src', window.hq.config.rootPath + 'img/page_edit.png'
 										span.append ' '
 										return span
 									maxDate = 0
@@ -103,7 +103,7 @@ class Bank
 										description = $('<td>').text tr.description.toLowerCase()
 										if (typeof tr.nbUpdates) is 'number' and tr.nbUpdates > 0 then description.prepend getNbUpdates tr.nbUpdates
 										line.append description
-										pencil = $('<img>').css('cursor', 'pointer').attr('src', window.hq.config.rootPath + 'img/pencil.png').attr('title', 'edit').attr 'alt', ''
+										pencil = $('<img>').css('cursor', 'pointer').attr('src', window.hq.config.rootPath + 'img/pencil.png').attr 'title', 'edit'
 										pencil.click(((tr) =>
 											() => @editTransaction tr
 										)(tr))
@@ -130,7 +130,7 @@ class Bank
 										description = $('<td>').text tr.description.toLowerCase()
 										if (typeof tr.nbUpdates) is 'number' and tr.nbUpdates > 0 then description.prepend getNbUpdates tr.nbUpdates
 										line.append description
-										pencil = $('<img>').css('cursor', 'pointer').attr('src', window.hq.config.rootPath + 'img/pencil.png').attr('title', 'edit').attr 'alt', ''
+										pencil = $('<img>').css('cursor', 'pointer').attr('src', window.hq.config.rootPath + 'img/pencil.png').attr 'title', 'edit'
 										pencil.click(((tr) =>
 											() => @editTransaction tr
 										)(tr))
@@ -144,11 +144,9 @@ class Bank
 										', and subtracting ' + (@projectionSub * -1) + ' from ' + @projectionSubNb + ' transaction' + (if @projectionSubNb > 1 then 's' else '')
 									@dom.balance.attr 'title', projectionTitle
 									projection = balance + @projectionAdd + @projectionSub
-									if projection <= 500
-										@dom.balanceProjection.css 'color', '#C60F13'
-									else
-										@dom.balanceProjection.css 'color', 'black'
 									@dom.balanceProjection.text window.hq.utils.round projection, 2
+									if projection <= 500
+										@dom.balanceProjection.append $('<img>').attr('src', window.hq.config.rootPath + 'img/exclamation.png').attr 'title', 'it\'s time to stop spending'
 									header.text unmatched.length + ' unmatched, also showing ' + matched.length + ' matched (including ' + nbConsideredMatched + ' considered matched)'
 							else
 								@error 'malformed json reply while fetching matched transactions'
