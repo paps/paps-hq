@@ -2,7 +2,7 @@ module.exports = (app) ->
 
 	if app.config.notifyOnStart
 		addNotification = (require __dirname + '/notificators/add') app
-		setTimeout (() -> addNotification 'headquarters', 'Headquarters started', 144, 0, 163, '*'), 2000
+		setTimeout (() -> addNotification 'headquarters', 'Headquarters (re)started', 144, 0, 163, '*'), 2000
 
 	if app.config.notifications.reddit.enabled
 		RedditChecker = (require __dirname + '/notificators/RedditChecker') app
@@ -16,4 +16,4 @@ module.exports = (app) ->
 	Wallets = (require __dirname + '/lib/Wallets') app
 	app.hq.wallets = new Wallets
 	if app.config.wallets.enabled
-		app.hq.wallets.checkLater(app.config.wallets.firstCheck)
+		app.hq.wallets.checkLater app.config.wallets.firstCheck

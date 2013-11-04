@@ -27,7 +27,7 @@ module.exports =
 			enabled: no # enable reddit mail checking or not
 			user: ''
 			password: ''
-			checkInterval: 60 * 60 # seconds between each mail check
+			checkInterval: 60 * 62.37 # seconds between each mail check
 			userAgent: 'headquarters mail checker bot 1'
 
 	mining:
