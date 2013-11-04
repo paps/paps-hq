@@ -9,6 +9,11 @@ module.exports = (app) ->
 		redditChecker = new RedditChecker
 		redditChecker.checkLater()
 
+	if app.config.notifications.gmail.enabled
+		GmailChecker = (require __dirname + '/notificators/GmailChecker') app
+		gmailChecker = new GmailChecker
+		gmailChecker.checkLater()
+
 	Mining = (require __dirname + '/lib/Mining') app
 	app.hq.mining = new Mining
 	app.hq.mining.checkLater()

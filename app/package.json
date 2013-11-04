@@ -17,6 +17,7 @@
         "express-validator": "0.7.x",
         "simple-errors": "0.0.x",
         "async": "0.2.x",
-        "request": "2.27.x"
+        "request": "2.27.x",
+        "xml2js": "0.2.x"
     }
 }

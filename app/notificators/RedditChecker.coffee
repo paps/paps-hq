@@ -53,7 +53,7 @@ module.exports = (app) ->
 							if body.data.has_mail and not @hasMail
 								addNotification 'reddit', 'New reddit mail', 143, 210, 255, '*'
 							else if not body.data.has_mail and @hasMail
-								# todo remove notification by id
+								# TODO remove notification by id
 								;
 							@hasMail = body.data.has_mail
 						catch e

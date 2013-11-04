@@ -23,6 +23,11 @@ module.exports =
 				tablet: '' # the name of your tablet device at pushover
 				mobile: '' # the name of your phone device at pushover
 				# populate with more devices as needed
+		gmail:
+			enabled: no
+			email: ''
+			password: '' # generate an application password and put it here
+			checkInterval: 22 # seconds
 		reddit:
 			enabled: no # enable reddit mail checking or not
 			user: ''
