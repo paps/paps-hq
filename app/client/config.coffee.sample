@@ -14,7 +14,7 @@ window.hq =
 		futureTransactions:
 			tags: ['atm', 'supermarket', 'restaurant', 'fastfood', 'club',
 				'bar', 'pharmacy', 'transport', 'doctor', 'rent', 'utilities',
-				'domain', 'tech', 'bitcoin', 'other']
+				'domain', 'tech', 'bitcoin', 'haircut', 'other']
 
 		notifications:
 			knownTypes:
