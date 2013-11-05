@@ -38,11 +38,11 @@ class Wallets
 							line = $('<tr>')
 							line.append $('<td>').text wallet.name
 							amountCell = $('<td>')
-							if wallet.amount
+							if (typeof wallet.amount) is 'number'
 								amountCell.text (window.hq.utils.round wallet.amount, 4) + ' ' + currency.symbol + ' '
 								total += wallet.amount
 							error = wallet.error
-							if not error and not wallet.amount then error = 'amount not fetched yet'
+							if not error and (typeof wallet.amount) isnt 'number' then error = 'amount not fetched yet'
 							if error
 								amountCell.append $('<img>').attr('src', window.hq.config.rootPath + 'img/exclamation.png')
 								amountCell.attr 'title', error
