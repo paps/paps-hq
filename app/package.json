@@ -18,6 +18,7 @@
         "simple-errors": "0.0.x",
         "async": "0.2.x",
         "request": "2.27.x",
-        "xml2js": "0.2.x"
+        "xml2js": "0.2.x",
+        "underscore": "1.5.x"
     }
 }

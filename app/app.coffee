@@ -8,8 +8,8 @@ LocalStrategy = require('passport-local').Strategy
 db = require 'any-db'
 
 express.application.db = db.createPool config.db,
-	min: 1
-	max: 5
+	min: 10
+	max: 10
 SessionStore = (require __dirname + '/lib/SessionStore') express.application.db
 express.application.config = config
 express.application.hq = {}
