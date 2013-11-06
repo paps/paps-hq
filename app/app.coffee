@@ -63,6 +63,8 @@ app.use flash()
 app.use (req, res, next) ->
 	res.locals.user = req.user
 	res.locals.rootPath = config.rootPath
+	if req.user and app.hq.sessions
+		app.hq.sessions.activeIp req.ip
 	next()
 
 # request routing

@@ -1,28 +1,29 @@
 .moduleDiv
-    div
-        button.tiny#sessionAll All
-        | 
-        button.tiny#sessionDesktop Desktop
-        | 
-        button.tiny#sessionMobile Mobile
-        | 
-        button.tiny#sessionTablet Tablet
-        | 
-        button.tiny#sessionNone None
-    pre.moduleAlert#sessionAlertBox
-    div
-        button.tiny.secondary#sessionRefresh Refresh
-        | 
-        button.tiny.secondary#sessionSave Save
-        | 
-        a.button.tiny.secondary(href="logout") Exit
-        | 
-        a.button.tiny.secondary(href="logout-all") Exit all
-        | 
-        img#sessionDoc(src="#{rootPath}img/book.png", alt="", title="documentation", style="cursor: pointer;")
-    div
-        input#sessionAutoRefresh(type="checkbox")
-        | 
-        label(for="sessionAutoRefresh", style="display: inline;") Auto refresh
-        | 
-        span#sessionRefreshCounter
+    .row(style="margin-right: 0px;")
+        .small-6.columns
+            div
+                button.tiny#sessionAll Open all
+                | 
+                button.tiny#sessionNone Close all
+                | 
+                button.tiny#sessionSessions Sessions
+            pre.moduleAlert#sessionAlertBox
+            div
+                button.tiny.secondary#sessionRefresh Refresh
+                | 
+                button.tiny.secondary#sessionSave Save
+                | 
+                a.button.tiny.secondary(href="logout") Exit
+                | 
+                a.button.tiny.secondary(href="logout-all") Exit all
+                | 
+                img#sessionDoc(src="#{rootPath}img/book.png", alt="", title="documentation", style="cursor: pointer;")
+            div
+                input#sessionAutoRefresh(type="checkbox")
+                | 
+                label(for="sessionAutoRefresh", style="display: inline;") Auto refresh
+                | 
+                span#sessionRefreshCounter
+        .small-6.columns.hide#sessionTableRow(style="border: 1px dotted #ccc; padding: 0px;")
+            div(style="overflow: auto; height: 90px;")
+                table#sessionTable(style="width: 100%; border: none;")

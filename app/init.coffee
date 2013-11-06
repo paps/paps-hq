@@ -22,3 +22,6 @@ module.exports = (app) ->
 	app.hq.wallets = new Wallets
 	if app.config.wallets.enabled
 		app.hq.wallets.checkLater app.config.wallets.firstCheck
+
+	Sessions = (require __dirname + '/lib/Sessions') app
+	app.hq.sessions = new Sessions

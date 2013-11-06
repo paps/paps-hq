@@ -3,13 +3,10 @@ window.hq =
 		rootPath: '/' # with terminating slash
 
 		session:
-			modules:
-				all: ['notifications', 'bank', 'futureTransactions', 'budget',
-					'notes', 'mining', 'wallets']
-				desktop: ['notifications', 'futureTransactions']
-				mobile: []
-				tablet: []
+			modules: ['notifications', 'bank', 'futureTransactions', 'budget',
+				'notes', 'mining', 'wallets']
 			refreshInterval: 180 # seconds
+			gentleRefresh: 275 # milliseconds between each module refresh
 
 		futureTransactions:
 			tags: ['atm', 'supermarket', 'restaurant', 'fastfood', 'club',

@@ -10,6 +10,11 @@ module.exports = (app) ->
 				errors: if err then [err] else []
 				configuration: configuration
 
+	app.get '/modules/session/active-sessions', (ensureLoggedIn app.config.rootPath), (req, res) ->
+		res.json
+			errors: []
+			sessions: app.hq.sessions.get()
+
 	app.post '/modules/session/save-configuration', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		(req.assert 'autoRefresh', 'invalid auto refresh flag').isInt().min(0).max 1
 		(req.assert 'openModules', 'invalid open modules string').len 0, 200

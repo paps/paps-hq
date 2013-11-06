@@ -1,8 +1,8 @@
 class Session
 	constructor: () ->
 		@dom = window.hq.utils.getDom 'session',
-			['all', 'desktop', 'mobile', 'tablet', 'none', 'refresh',
-			'autoRefresh', 'refreshCounter', 'save', 'alertBox', 'doc']
+			['all', 'sessions', 'none', 'refresh', 'alertBox', 'doc',
+			'autoRefresh', 'refreshCounter', 'save', 'table', 'tableRow']
 
 		@dom.alertBox.click () => @dom.alertBox.hide()
 
@@ -13,16 +13,14 @@ class Session
 			e.stopPropagation()
 
 		@dom.none.click () =>
-			for m in window.hq.config.session.modules.all
+			for m in window.hq.config.session.modules
 				window.hq[m].hide()
 
 		@dom.all.click () =>
-			for m in window.hq.config.session.modules.all
+			for m in window.hq.config.session.modules
 				window.hq[m].show()
 
-		@dom.desktop.click () => @showArrayOfModules 'desktop'
-		@dom.mobile.click () => @showArrayOfModules 'mobile'
-		@dom.tablet.click () => @showArrayOfModules 'tablet'
+		@dom.sessions.click () => @refreshAndShowSessions()
 
 		@timeBeforeRefresh = null
 
@@ -60,7 +58,7 @@ class Session
 					if cfg
 						@setAutoRefresh cfg.autoRefresh
 						modules = cfg.openModules.split ','
-						for m in window.hq.config.session.modules.all
+						for m in window.hq.config.session.modules
 							if m in modules
 								window.hq[m].show()
 							else
@@ -73,9 +71,9 @@ class Session
 			@error status + ': ' + err
 
 		@dom.save.click () =>
-			@dom.save.prop('disabled', true).text 'Saving...'
+			@dom.save.prop('disabled', true).text '...'
 			modules = ''
-			for m in window.hq.config.session.modules.all
+			for m in window.hq.config.session.modules
 				if window.hq[m].isVisible()
 					if modules.length then modules += ','
 					modules += m
@@ -110,17 +108,56 @@ class Session
 
 	refreshModules: () =>
 		if not @dom.refresh.prop 'disabled'
-			@dom.refresh.prop('disabled', true).text 'Refreshing...'
-			setTimeout (() => @dom.refresh.prop('disabled', false).text 'Refresh'), 3000
-			for m in window.hq.config.session.modules.all
-				if window.hq[m].isVisible() then window.hq[m].refresh()
+			@dom.refresh.prop('disabled', true).text '...'
+			setTimeout (() => @dom.refresh.prop('disabled', false).text 'Refresh'), 10000
+			c = 0
+			for m in window.hq.config.session.modules
+				if window.hq[m].isVisible()
+					setTimeout ((m) =>
+						() => window.hq[m].refresh()
+					)(m), window.hq.config.session.gentleRefresh * c++
+			if @dom.tableRow.is ':visible'
+				setTimeout (() => @refreshAndShowSessions()), window.hq.config.session.gentleRefresh * c
 
-	showArrayOfModules: (name) =>
-		for m in window.hq.config.session.modules.all
-			if m in window.hq.config.session.modules[name]
-				window.hq[m].show()
+	refreshAndShowSessions: () =>
+		@dom.tableRow.show()
+		@dom.table.empty().append $('<tr>').append $('<td>').css('text-align', 'center').text '...'
+		($.ajax window.hq.config.rootPath + 'modules/session/active-sessions',
+			type: 'GET'
+			dataType: 'json'
+		).done((data) =>
+			if data.errors
+				if data.errors.length
+					@error JSON.stringify data.errors
+				else
+					@dom.table.empty()
+					for ip, sess of data.sessions
+						line = $('<tr>')
+						line.append $('<td>').attr('title', 'session ip').text ip
+						line.append $('<td>').css('text-align', 'center').attr('title', 'first seen').text window.hq.utils.dateToStr sess.firstSeen
+						age = sess.timeSinceLastSeen
+						if (typeof age) is 'number' and age >= 0
+							if age < 120
+								age = '' + age + 's'
+							else if age < 60 * 60 * 2
+								age = '' + Math.round(age / 60) + 'm'
+							else if age < 3 * 24 * 60 * 60
+								age = '' + Math.round(age / (60 * 60)) + 'h'
+							else
+								age = '' + Math.round(age / (24 * 60 * 60)) + 'd'
+						else
+							age = '?'
+						line.append $('<td>').css('text-align', 'right').attr('title', 'time since last activity').text age
+						@dom.table.append line
+					refreshButton = $('<button>').addClass('tiny').css('margin-bottom', '2px').text 'Refresh'
+					refreshButton.click () => @refreshAndShowSessions()
+					closeButton = $('<button>').addClass('tiny').css('margin-bottom', '2px').text 'Close'
+					closeButton.click () => @dom.tableRow.hide()
+					@dom.table.append $('<tr>').append $('<td>').attr('colspan', 3).css('text-align', 'center').append(refreshButton).append(' ').append(closeButton)
 			else
-				window.hq[m].hide()
+				@error 'malformed json reply'
+		).fail (xhr, status, err) =>
+			@error status + ': ' + err
 
 	error: (err) => @dom.alertBox.text(err).show()
 
