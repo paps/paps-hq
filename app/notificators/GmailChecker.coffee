@@ -3,8 +3,6 @@ parseXml = (require 'xml2js').parseString
 async = require 'async'
 _ = require 'underscore'
 
-util = require 'util'
-
 module.exports = (app) ->
 
 	addNotification = (require __dirname + '/add') app
@@ -35,7 +33,6 @@ module.exports = (app) ->
 								addNotification 'email', 'Could not parse Gmail atom feed: ' + err, 255, 53, 94
 								@checkLater()
 							else
-								console.log 'oldMail WAS: ' + (util.inspect @oldMail)
 								newMail = []
 								oldMailIterator = (mail, done) =>
 									if (_.find res.feed.entry, (entry) => (typeof entry.title[0]) is 'string' and entry.title[0] is mail.title[0])
@@ -58,4 +55,3 @@ module.exports = (app) ->
 												done()
 									async.eachSeries res.feed.entry, feedIterator, () =>
 										@checkLater()
-										console.log 'oldMail IS NOW: ' + (util.inspect @oldMail)
