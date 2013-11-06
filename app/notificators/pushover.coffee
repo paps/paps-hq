@@ -1,4 +1,5 @@
 request = require 'request'
+async = require 'async'
 colors =
 	'Air Force blue': [93,138,168]
 	'Alice blue': [240,248,255]
@@ -759,7 +760,7 @@ module.exports = (app) ->
 				ret = name
 		return ret
 
-	(addNotification, type, text, r, g, b, device) ->
+	(addNotification, type, text, r, g, b, device, emergency) ->
 		cfg = app.config.notifications.pushover
 		if not cfg.enabled then return
 		if text.length > 350
@@ -770,11 +771,26 @@ module.exports = (app) ->
 			message: text
 			title: '[' + type + '] ' + (findColorName r, g, b) + ' notification'
 		if device then data.device = device
-		request
-			url: 'https://api.pushover.net/1/messages.json'
-			method: 'POST'
-			form: data,
-			(err, res, body) ->
-				console.log 'Notification sent to pushover, ' + (if err then ('http error: ' + err) else 'no http error') + ', response: ' + body
-				if err
-					addNotification 'pushover', 'Pushover error: ' + err, 166, 48, 76
+		if emergency
+			data.priority = 2
+			data.retry = 30
+			data.expire = 3600
+			data.sound = 'echo'
+		httpError = null
+		tries = 0
+		sendToPushover = (done) ->
+			++tries
+			request
+				url: 'https://api.pushover.net/1/messages.json'
+				method: 'POST'
+				form: data,
+				(err, res, body) ->
+					console.log 'Sending notification to pushover (try ' + tries + ') - ' + (if err then ('http error: ' + err) else 'no http error') + ', response: ' + body
+					if err
+						httpError = err.toString()
+					else
+						httpError = null
+					done()
+		async.doWhilst sendToPushover, (() -> httpError isnt null and tries < app.config.notifications.pushover.tries), () ->
+			if httpError
+				addNotification 'pushover', 'Pushover error after ' + tries + ' tries: ' + httpError, 166, 48, 76

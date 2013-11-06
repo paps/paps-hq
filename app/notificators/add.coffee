@@ -1,4 +1,5 @@
 crypto = require 'crypto'
+async = require 'async'
 
 module.exports = (app) ->
 
@@ -8,6 +9,8 @@ module.exports = (app) ->
 	add = (type, text, r, g, b, devices, done) ->
 		if devices is '*'
 			pushover add, type, text, r, g, b
+		else if devices is '!'
+			pushover add, type, text, r, g, b, null, yes
 		else if (typeof devices) is 'string'
 			realDevices = []
 			for category in devices.split ','
@@ -21,13 +24,34 @@ module.exports = (app) ->
 					pushover add, type, text, r, g, b, d
 		md5sum = type + '_' + text + '_' + r + '_' + g + '_' + b
 		md5sum = crypto.createHash('md5').update(md5sum).digest("hex")
-		Notification.getByMd5Sum md5sum, (err, notification) ->
-			if err
-				if done then done err
-			else
-				if notification
-					console.log 'Incrementing counter for notification ' + notification.md5sum + '.'
-					Notification.incrementCounter notification, (if done then done else (() -> ))
+		dbError = null
+		notificationId = null
+		tries = 0
+		addToDb = (done) ->
+			++tries
+			Notification.getByMd5Sum md5sum, (err, notification) ->
+				if err
+					dbError = err
+					done()
 				else
-					console.log 'Adding new notification ' + md5sum + '.'
-					Notification.insert type, text, r, g, b, md5sum, (if done then done else (() -> ))
+					if notification
+						console.log 'Incrementing counter for notification "' + notification.text + '" (try ' + tries + ').'
+						Notification.incrementCounter notification, (err, id) ->
+							if err
+								dbError = err
+							else
+								dbError = null
+								notificationId = id
+							done()
+					else
+						console.log 'Adding new notification "' + text + '" (try ' + tries + ').'
+						Notification.insert type, text, r, g, b, md5sum, (err, id) ->
+							if err
+								dbError = err
+							else
+								dbError = null
+								notificationId = id
+							done()
+		async.doWhilst addToDb, (() -> dbError isnt null and tries < app.config.notifications.tries), () ->
+			if done
+				done dbError, notificationId

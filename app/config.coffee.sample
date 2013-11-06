@@ -13,10 +13,12 @@ module.exports =
 		password: '' # generate password here
 
 	notifications:
+		tries: 10
 		readPassword: '' # generate password here
 		writePassword: '' # generate password here
 		pushover:
 			enabled: no
+			tries: 10
 			user: '' # put pushover user key here
 			token: '' # put pushover app token here
 			devices:
@@ -34,6 +36,8 @@ module.exports =
 			password: ''
 			checkInterval: 60 * 62.37 # seconds between each mail check
 			userAgent: 'headquarters mail checker bot 1'
+		sessions:
+			enabled: no
 
 	mining:
 		password: '' # generate password here

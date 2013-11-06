@@ -11,7 +11,7 @@ module.exports = (app) ->
 		purgeOld: () =>
 			toKeep = {}
 			for ip, sess of @sessions
-				if utils.now() - sess.lastSeen < 7 * 24 * 60 * 60
+				if utils.now() - sess.lastSeen < 2 * 24 * 60 * 60 # 2 days
 					toKeep[ip] = sess
 			@sessions = toKeep
 
@@ -21,7 +21,7 @@ module.exports = (app) ->
 				@sessions[ip] =
 					firstSeen: utils.now()
 				if @notify
-					; # TODO
+					addNotification 'headquarters', 'New session from ' + ip, 120, 134, 107, '*'
 			@sessions[ip].lastSeen = utils.now()
 
 		get: () =>
