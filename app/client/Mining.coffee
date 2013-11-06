@@ -39,11 +39,16 @@ class Mining
 						if (Array.isArray miner?.status?.STATUS) and miner?.status?.STATUS.length > 0
 							s = miner.status.STATUS[0]
 							header.append ' - ' + s.Msg + s.Description
-						link = $('<div>').css('float', 'right').append $('<img>').attr('src', window.hq.config.rootPath + 'img/transmit.png')
-						age = miner.notificator.timeSinceUpdate
+						link = $('<div>').css('float', 'right').append $('<img>').attr 'src', window.hq.config.rootPath + 'img/transmit.png'
+						if (typeof miner.notificator.timeSinceUpdate) is 'number' and miner.notificator.timeSinceUpdate >= 0
+							age = miner.notificator.timeSinceUpdate
+						else
+							age = -1
 						if miner.notificator.consideredDown
-							if age < 120
-								age = '' + (if age < 0 then 0 else age) + 's'
+							if age < 0
+								age = '?'
+							else if age < 120
+								age = '' + age + 's'
 							else if age < 60 * 60 * 2
 								age = '' + Math.round(age / 60) + 'm'
 							else
@@ -52,7 +57,10 @@ class Mining
 							link.append $('<img>').attr('src', window.hq.config.rootPath + 'img/exclamation.png')
 							link.attr 'title', name + ' is not sending updates'
 						else
-							link.append ' ' + (if age < 0 then 0 else age) + 's'
+							if age < 0
+								link.append ' ?'
+							else
+								link.append ' ' + age + 's'
 							link.attr 'title', 'seconds since update from ' + name
 						header.append link
 						@dom.table.append $('<tr>').css('border-bottom', '1px solid #ccc').css('height', '27px').append header

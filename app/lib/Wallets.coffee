@@ -29,7 +29,7 @@ module.exports = (app) ->
 								if wallet.amount
 									diff = Math.abs(amount - wallet.amount)
 									if diff isnt 0
-										msg = currency.currency + ' wallet "' + wallet.name + '" has ' + (if diff < 0 then 'sent' else 'received') + ' '
+										msg = currency.currency + ' wallet "' + wallet.name + '" has ' + (if amount < wallet.amount then 'sent' else 'received') + ' '
 										msg += utils.round diff, 4
 										msg += ' ' + currency.symbol + ', '
 										msg += 'balance is now ' + (utils.round amount, 4) + ' ' + currency.symbol
@@ -38,6 +38,7 @@ module.exports = (app) ->
 								wallet.error = null
 							else
 								wallet.error = 'request returned an invalid float'
+						wallet.update = utils.now()
 						done()
 				async.eachSeries currency.wallets, walletIterator, () ->
 					done()
