@@ -31,9 +31,9 @@ class Wallets
 					@dom.table.empty()
 					for currency in data.wallets
 						link = $('<div>').css('float', 'right').append $('<img>').attr 'src', window.hq.config.rootPath + 'img/transmit.png'
-						header = $('<td>').attr('colspan', 4).text ' ' + currency.currency
+						header = $('<td>').attr('colspan', 4).text(' ').append $('<strong>').text currency.currency
 						header.prepend $('<img>').attr('src', window.hq.config.rootPath + 'img/' + currency.icon + '.png')
-						@dom.table.append $('<tr>').css('border-bottom', '1px solid #ccc').css('height', '27px').css('font-weight', 'bold').append header
+						@dom.table.append $('<tr>').css('border-bottom', '1px solid #ccc').css('height', '27px').append header
 						total = 0
 						timeSinceUpdate = -1
 						for wallet in currency.wallets
@@ -66,9 +66,9 @@ class Wallets
 						link.attr 'title', 'elapsed time since last check'
 						header.append link
 						totalTr = $('<tr>')
-						totalTr.append $('<td>').css('text-align', 'right').css('font-weight', 'bold').text '= '
+						totalTr.append $('<td>').css('text-align', 'right').css('font-weight', 'bold').html '=&nbsp;'
 						totalTr.append $('<td>').text (window.hq.utils.round total, 4) + ' ' + currency.symbol
-						totalTr.append $('<td>')
+						totalTr.append $('<td>').css 'height', '17px'
 						totalTr.append $('<td>')
 						@dom.table.append totalTr
 			else

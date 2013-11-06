@@ -2,6 +2,8 @@ ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn
 
 module.exports = (app) ->
 
+	utils = require __dirname + '/../../lib/utils'
+
 	app.get '/modules/wallets/latest', (ensureLoggedIn app.config.rootPath), (req, res) ->
 		for currency in app.hq.wallets.wallets
 			for wallet in currency.wallets
