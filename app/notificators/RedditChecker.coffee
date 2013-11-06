@@ -3,12 +3,14 @@ request = require 'request'
 module.exports = (app) ->
 
 	addNotification = (require __dirname + '/add') app
+	Notification = (require __dirname + '/../models/Notification') app.db
 
 	class RedditChecker
 		constructor: () ->
 			@cfg = app.config.notifications.reddit
 			@jar = request.jar()
 			@hasMail = no
+			@notificationId = null
 
 		checkLater: () =>
 			setTimeout (() => @login()), @cfg.checkInterval * 1000
@@ -51,10 +53,14 @@ module.exports = (app) ->
 						try
 							body = JSON.parse body
 							if body.data.has_mail and not @hasMail
-								addNotification 'reddit', 'New reddit mail', 143, 210, 255, '*'
+								@notificationId = null
+								addNotification 'reddit', 'New reddit mail', 143, 210, 255, '*', (err, id) =>
+									if not err
+										@notificationId = id
 							else if not body.data.has_mail and @hasMail
-								# TODO remove notification by id
-								;
+								if @notificationId
+									Notification.markRead @notificationId, 1, (() ->)
+									@notificationId = null
 							@hasMail = body.data.has_mail
 						catch e
 							addNotification 'reddit', 'Exception while parsing mail status response: ' + e, 200, 80, 80, '*'
