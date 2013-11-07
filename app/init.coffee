@@ -25,3 +25,8 @@ module.exports = (app) ->
 
 	Sessions = (require __dirname + '/lib/Sessions') app
 	app.hq.sessions = new Sessions
+
+	Machines = (require __dirname + '/lib/Machines') app
+	app.hq.machines = new Machines
+	if app.config.machines.enabled
+		app.hq.machines.checkLater()

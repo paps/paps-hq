@@ -1,0 +1,13 @@
+.moduleDiv
+    h6.subheader.moduleHead#machinesHeader
+        .moduleIcon
+            img(src="#{rootPath}img/computer.png", alt="")
+        .moduleButtons
+            img#machinesDoc(src="#{rootPath}img/book.png", alt="", title="documentation")
+            | 
+            img#machinesRefresh(src="#{rootPath}img/arrow_refresh.png", alt="", title="refresh")
+        | Machines
+    .moduleContent#machinesContent
+        pre.moduleAlert#machinesAlertBox
+        table#machinesTable(style='width: 100%; border: none; font-family: monospace; margin-bottom: 8px;')
+    .moduleOverlay#machinesOverlay

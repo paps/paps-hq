@@ -38,11 +38,32 @@ module.exports =
 			userAgent: 'headquarters mail checker bot 1'
 		sessions:
 			enabled: no
+			knownIps:
+				'127.0.0.1': 'localhost'
 
 	mining:
 		password: '' # generate password here
 		checkInterval: 2.1 * 60 # seconds
 		allowedDowntime: 2.5 * 60 # seconds
+
+	machines:
+		enabled: no
+		password: '' # generate password here
+		checkInterval: 16 * 60 # seconds
+		allowedDowntime: 30 * 60 # seconds
+
+	velib:
+		enabled: no
+		checkInterval: 11.75 * 60 # seconds
+		key: '' # your JCDecaux developer API key
+		stations: [
+			{
+				contract: 'Paris'
+				id: 123
+				name: 'My favorite Velib station'
+				stats: 'http://v.mat.cc/s/42/703.html'
+			}
+		]
 
 	wallets:
 		enabled: no

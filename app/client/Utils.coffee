@@ -23,4 +23,18 @@ class Utils
 
 	now: () -> Math.round(Date.now() / 1000)
 
+	ageToString: (age) ->
+		if (typeof age) isnt 'number'
+			'?'
+		if age < 0
+			'?'
+		else if age < 120
+			'' + age + 's'
+		else if age < 60 * 60 * 2
+			'' + Math.round(age / 60) + 'm'
+		else if age < 60 * 60 * 72
+			'' + Math.round(age / (60 * 60)) + 'h'
+		else
+			'' + Math.round(age / (60 * 60 * 24)) + 'd'
+
 $ -> window.hq.utils = new Utils

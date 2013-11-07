@@ -4,7 +4,7 @@ window.hq =
 
 		session:
 			modules: ['notifications', 'bank', 'futureTransactions', 'budget',
-				'notes', 'mining', 'wallets']
+				'notes', 'mining', 'wallets', 'machines']
 			refreshInterval: 180 # seconds
 			gentleRefresh: 275 # milliseconds between each module refresh
 

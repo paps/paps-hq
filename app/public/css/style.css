@@ -27,7 +27,7 @@
 }
 
 .moduleHead {
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid #666;
 	cursor: pointer;
 }
 
@@ -60,4 +60,8 @@
 #walletsTable td {
 	padding: 0px;
 	vertical-align: bottom;
+}
+
+#machinesTable td {
+	padding: 0px;
 }

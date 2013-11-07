@@ -54,15 +54,7 @@ class Wallets
 							@dom.table.append line
 							if (typeof wallet.timeSinceUpdate) is 'number' and wallet.timeSinceUpdate > timeSinceUpdate
 								timeSinceUpdate = wallet.timeSinceUpdate
-						if timeSinceUpdate >= 0
-							if timeSinceUpdate < 120
-								link.append ' ' + timeSinceUpdate + 's'
-							else if timeSinceUpdate < 60 * 60 * 2
-								link.append ' ' + Math.round(timeSinceUpdate / 60) + 'm'
-							else
-								link.append ' ' + Math.round(timeSinceUpdate / (60 * 60)) + 'h'
-						else
-							link.append ' ?'
+						link.append ' ' + (window.hq.utils.ageToString timeSinceUpdate)
 						link.attr 'title', 'elapsed time since last check'
 						header.append link
 						totalTr = $('<tr>')

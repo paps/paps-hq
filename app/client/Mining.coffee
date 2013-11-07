@@ -45,15 +45,7 @@ class Mining
 						else
 							age = -1
 						if miner.notificator.consideredDown
-							if age < 0
-								age = '?'
-							else if age < 120
-								age = '' + age + 's'
-							else if age < 60 * 60 * 2
-								age = '' + Math.round(age / 60) + 'm'
-							else
-								age = '' + Math.round(age / (60 * 60)) + 'h'
-							link.append $('<strong>').css('color', '#C60F13').text ' down for ' + age + ' '
+							link.append $('<strong>').css('color', '#C60F13').text ' down for ' + (window.hq.utils.ageToString age) + ' '
 							link.append $('<img>').attr('src', window.hq.config.rootPath + 'img/exclamation.png')
 							link.attr 'title', name + ' is not sending updates'
 						else

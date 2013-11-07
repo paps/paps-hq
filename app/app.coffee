@@ -86,6 +86,7 @@ app.use express.errorHandler
 (require __dirname + '/routes/modules/notes') app
 (require __dirname + '/routes/modules/mining') app
 (require __dirname + '/routes/modules/wallets') app
+(require __dirname + '/routes/modules/machines') app
 
 # launch other stuff
 (require __dirname + '/init') app

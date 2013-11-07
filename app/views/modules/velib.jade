@@ -1,0 +1,13 @@
+.moduleDiv
+    h6.subheader.moduleHead#velibHeader
+        .moduleIcon
+            img(src="#{rootPath}img/velib.png")
+        .moduleButtons
+            img#velibDoc(src="#{rootPath}img/book.png", title="documentation")
+            | 
+            img#velibRefresh(src="#{rootPath}img/arrow_refresh.png", title="refresh")
+        | Velib
+    .moduleContent#velibContent
+        pre.moduleAlert#velibAlertBox
+        table#velibTable(style='width: 100%; border: none; font-family: monospace; margin-bottom: 8px;')
+    .moduleOverlay#velibOverlay
