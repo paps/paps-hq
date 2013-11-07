@@ -133,21 +133,12 @@ class Session
 					@dom.table.empty()
 					for ip, sess of data.sessions
 						line = $('<tr>')
-						line.append $('<td>').attr('title', 'session ip').text ip
-						line.append $('<td>').css('text-align', 'center').attr('title', 'first seen').text window.hq.utils.dateToStr sess.firstSeen
-						age = sess.timeSinceLastSeen
-						if (typeof age) is 'number' and age >= 0
-							if age < 120
-								age = '' + age + 's'
-							else if age < 60 * 60 * 2
-								age = '' + Math.round(age / 60) + 'm'
-							else if age < 3 * 24 * 60 * 60
-								age = '' + Math.round(age / (60 * 60)) + 'h'
-							else
-								age = '' + Math.round(age / (24 * 60 * 60)) + 'd'
+						if sess.name
+							line.append $('<td>').attr('title', ip).text sess.name
 						else
-							age = '?'
-						line.append $('<td>').css('text-align', 'right').attr('title', 'time since last activity').text age
+							line.append $('<td>').attr('title', 'unknown ip').text ip
+						line.append $('<td>').css('text-align', 'center').attr('title', 'first seen').text window.hq.utils.dateToStr sess.firstSeen
+						line.append $('<td>').css('text-align', 'right').attr('title', 'time since last activity').text window.hq.utils.ageToString sess.timeSinceLastSeen
 						@dom.table.append line
 					refreshButton = $('<button>').addClass('tiny').css('margin-bottom', '2px').text 'Refresh'
 					refreshButton.click () => @refreshAndShowSessions()

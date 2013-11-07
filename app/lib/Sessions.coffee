@@ -6,6 +6,7 @@ module.exports = (app) ->
 	class Sessions
 		constructor: () ->
 			@notify = app.config.notifications.sessions.enabled
+			@knownIps = app.config.notifications.sessions.knownIps
 			@sessions = {}
 
 		purgeOld: () =>
@@ -20,8 +21,16 @@ module.exports = (app) ->
 			if not @sessions[ip]
 				@sessions[ip] =
 					firstSeen: utils.now()
+				if @knownIps[ip]
+					@sessions[ip].name = @knownIps[ip]
 				if @notify
-					addNotification 'headquarters', 'New session from ' + ip, 120, 134, 107, '*'
+					msg = 'New session from ' + ip + ' ('
+					if @knownIps[ip]
+						msg += @knownIps[ip]
+					else
+						msg += 'unknown'
+					msg += ')'
+					addNotification 'headquarters', msg, 120, 134, 107, '*'
 			@sessions[ip].lastSeen = utils.now()
 
 		get: () =>
