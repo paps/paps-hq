@@ -1,7 +1,39 @@
 module.exports = (db) ->
 
 	class Transaction
-		constructor: (@id, @amount, @description, @date, @balance, @considerMatched, @md5sum, @nbUpdates) ->
+		constructor: (
+			@id,
+			@amount,
+			@description,
+			@date,
+			@balance,
+			@considerMatched,
+			@md5sum,
+			@nbUpdates
+		) ->
+
+		@selectionFields: [
+			'id'
+			'amount'
+			'description'
+			'date'
+			'balance'
+			'consider_matched'
+			'md5sum'
+			'nb_updates'
+		]
+
+		@fromRow: (row) ->
+			new Transaction(
+				row.id,
+				row.amount,
+				row.description,
+				row.date,
+				row.balance,
+				row.consider_matched,
+				row.md5sum,
+				row.nb_updates
+			)
 
 		@insert: (amount, description, date, balance, considerMatched, md5sum, done) ->
 			db.query 'INSERT INTO transactions(amount, description, date, balance, consider_matched, md5sum, nb_updates) VALUES(?, ?, ?, ?, ?, ?, 0)',
@@ -23,25 +55,25 @@ module.exports = (db) ->
 				(err) -> if err then done err.toString() else done null
 
 		@getByMd5Sum: (md5sum, done) ->
-			db.query 'SELECT id, amount, description, date, balance, consider_matched, md5sum, nb_updates FROM transactions WHERE md5sum = ? ORDER BY date DESC, balance',
+			db.query 'SELECT ' + Transaction.selectionFields.join(',') + ' FROM transactions WHERE md5sum = ? ORDER BY date DESC, balance',
 				[md5sum],
 				(err, res) ->
 					if err
 						done err.toString()
 					else if res.rowCount >= 1
-						done null, new Transaction res.rows[0].id, res.rows[0].amount, res.rows[0].description, res.rows[0].date, res.rows[0].balance, res.rows[0].consider_matched, res.rows[0].md5sum, res.rows[0].nb_updates
+						done null, Transaction.fromRow(res.rows[0])
 					else
 						done null, null
 
 		@getUnmatched: (done) ->
-			db.query 'SELECT id, amount, description, date, balance, consider_matched, md5sum, nb_updates FROM transactions WHERE consider_matched IS NULL AND id NOT IN (SELECT transaction_id FROM future_transactions WHERE transaction_id >= 1) ORDER BY date DESC, id DESC', [],
+			db.query 'SELECT ' + Transaction.selectionFields.join(',') + ' FROM transactions WHERE consider_matched IS NULL AND id NOT IN (SELECT transaction_id FROM future_transactions WHERE transaction_id >= 1) ORDER BY date DESC, id DESC', [],
 				(err, res) ->
 					if err
 						done err.toString()
 					else
 						ret = []
 						for row in res.rows
-							ret.push new Transaction row.id, row.amount, row.description, row.date, row.balance, row.consider_matched, row.md5sum, row.nb_updates
+							ret.push Transaction.fromRow(row)
 						done null, ret
 
 		@getLastMatched: (done) ->

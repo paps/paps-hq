@@ -1,7 +1,36 @@
 module.exports = (db) ->
 
 	class FutureTransaction
-		constructor: (@id, @amount, @description, @date, @tag, @transactionId, @doNotMatch) ->
+		constructor: (
+			@id,
+			@amount,
+			@description,
+			@date,
+			@tag,
+			@transactionId,
+			@doNotMatch
+		) ->
+
+		@selectionFields: [
+			'id'
+			'amount'
+			'description'
+			'date'
+			'tag'
+			'transaction_id'
+			'do_not_match'
+		]
+
+		@fromRow: (row) ->
+			new FutureTransaction(
+				row.id,
+				row.amount,
+				row.description,
+				row.date,
+				row.tag,
+				row.transaction_id,
+				row.do_not_match
+			)
 
 		@insert: (amount, description, date, tag, doNotMatch, done) ->
 			db.query 'INSERT INTO future_transactions(amount, description, date, tag, do_not_match) VALUES(?, ?, ?, ?, ?)',
@@ -30,24 +59,24 @@ module.exports = (db) ->
 				(err) -> if err then done err.toString() else done null
 
 		@getUnmatched: (done) ->
-			db.query 'SELECT id, amount, description, date, tag, transaction_id, do_not_match FROM future_transactions WHERE transaction_id IS NULL ORDER BY date DESC', [],
+			db.query 'SELECT ' + FutureTransaction.selectionFields.join(',') + ' FROM future_transactions WHERE transaction_id IS NULL ORDER BY date DESC', [],
 				(err, res) ->
 					if err
 						done err.toString()
 					else
 						ret = []
 						for row in res.rows
-							ret.push new FutureTransaction row.id, row.amount, row.description, row.date, row.tag, row.transaction_id, row.do_not_match
+							ret.push FutureTransaction.fromRow(row)
 						done null, ret
 
 		@getLast: (done) ->
-			db.query 'SELECT id, amount, description, date, tag, transaction_id, do_not_match FROM future_transactions WHERE transaction_id IS NULL OR strftime(\'%s\', \'now\') - date <= 60 * 60 * 24 * 30 ORDER BY transaction_id IS NOT NULL, do_not_match IS NOT NULL DESC, date DESC', [],
+			db.query 'SELECT ' + FutureTransaction.selectionFields.join(',') + ' FROM future_transactions WHERE transaction_id IS NULL OR strftime(\'%s\', \'now\') - date <= 60 * 60 * 24 * 30 ORDER BY transaction_id IS NOT NULL, do_not_match IS NOT NULL DESC, date DESC', [],
 				(err, res) ->
 					if err
 						done err.toString()
 					else
 						ret = []
 						for row in res.rows
-							ret.push new FutureTransaction row.id, row.amount, row.description, row.date, row.tag, row.transaction_id, row.do_not_match
+							ret.push FutureTransaction.fromRow(row)
 						done null, ret
 

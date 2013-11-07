@@ -1,7 +1,27 @@
 module.exports = (db) ->
 
 	class Note
-		constructor: (@id, @date, @name, @text) ->
+		constructor: (
+			@id,
+			@date,
+			@name,
+			@text
+		) ->
+
+		@selectionFields: [
+			'id'
+			'date'
+			'name'
+			'text'
+		]
+
+		@fromRow: (row) ->
+			new Note(
+				row.id,
+				row.date,
+				row.name,
+				row.text
+			)
 
 		@insert: (name, text, done) ->
 			db.query 'INSERT INTO notes(name, text, date) VALUES(?, ?, strftime(\'%s\',\'now\'))',
@@ -41,12 +61,12 @@ module.exports = (db) ->
 						done null, ret
 
 		@get: (done) ->
-			db.query 'SELECT id, date, name, text FROM notes ORDER BY date DESC', [],
+			db.query 'SELECT ' + Note.selectionFields.join(',') + ' FROM notes ORDER BY date DESC', [],
 				(err, res) ->
 					if err
 						done err.toString()
 					else
 						ret = []
 						for row in res.rows
-							ret.push new Note row.id, row.date, row.name, row.text
+							ret.push Note.fromRow(row)
 						done null, ret
