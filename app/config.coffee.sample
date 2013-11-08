@@ -52,6 +52,14 @@ module.exports =
 		checkInterval: 16 * 60 # seconds
 		allowedDowntime: 30 * 60 # seconds
 
+	btcChina:
+		enabled: no
+		allowedDowntime: 8 * 60 # seconds
+		checkInterval: 12 # seconds
+		alerts: yes
+		emergencyAlerts: yes
+		trailingStop: 240 # yuans to lose before emergency alert
+
 	velib:
 		enabled: no
 		checkInterval: 11.75 * 60 # seconds

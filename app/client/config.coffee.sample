@@ -4,7 +4,7 @@ window.hq =
 
 		session:
 			modules: ['notifications', 'bank', 'futureTransactions', 'budget',
-				'notes', 'mining', 'wallets', 'machines']
+				'notes', 'mining', 'wallets', 'machines', 'btcChina']
 			refreshInterval: 180 # seconds
 			gentleRefresh: 275 # milliseconds between each module refresh
 
@@ -12,6 +12,10 @@ window.hq =
 			tags: ['atm', 'supermarket', 'restaurant', 'fastfood', 'club',
 				'bar', 'pharmacy', 'transport', 'doctor', 'rent', 'utilities',
 				'domain', 'tech', 'bitcoin', 'haircut', 'other']
+
+		btcChina:
+			yuanToEuro: 0.122982772
+			yuanToDollar: 0.164182
 
 		notifications:
 			knownTypes:
@@ -25,6 +29,7 @@ window.hq =
 				phone: 'telephone.png'
 				headquarters: 'flag_purple.png'
 				pushover: 'bell_go.png'
+				btcchina: 'btcchina.png'
 			unknownType: 'bell.png'
 
 		budget:

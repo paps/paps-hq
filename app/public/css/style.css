@@ -65,3 +65,8 @@
 #machinesTable td {
 	padding: 0px;
 }
+
+#btcChinaTable td {
+	height: 16px;
+	padding: 1px;
+}

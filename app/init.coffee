@@ -30,3 +30,11 @@ module.exports = (app) ->
 	app.hq.machines = new Machines
 	if app.config.machines.enabled
 		app.hq.machines.checkLater()
+
+	BtcChina = (require __dirname + '/lib/BtcChina') app
+	app.hq.btcChina = new BtcChina
+	if app.config.btcChina.enabled
+		setTimeout (() ->
+			app.hq.btcChina.setSource()
+			app.hq.btcChina.checkLater()
+		), 11000
