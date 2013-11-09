@@ -54,8 +54,8 @@ module.exports =
 
 	btcChina:
 		enabled: no
-		allowedDowntime: 8 * 60 # seconds
-		checkInterval: 12 # seconds
+		allowedDowntime: 5 * 60 # seconds (twice this time without tick -> emergency alert)
+		checkInterval: 20 # seconds
 		alerts: yes
 		emergencyAlerts: yes
 		trailingStop: 240 # yuans to lose before emergency alert

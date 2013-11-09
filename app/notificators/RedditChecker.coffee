@@ -36,7 +36,7 @@ module.exports = (app) ->
 						if (body.indexOf 'cookie') >= 0 # high quality parsing
 							@checkMail()
 						else
-							addNotification 'reddit', 'Login error: ' + body, 200, 80, 80, '*'
+							#addNotification 'reddit', 'Login error: ' + body, 200, 80, 80, '*'
 							@checkLater()
 
 		checkMail: () =>

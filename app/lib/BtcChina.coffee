@@ -10,6 +10,7 @@ module.exports = (app) ->
 			@cfg = app.config.btcChina
 			@lastUpdate = utils.now()
 			@lastTick = utils.now()
+			@sourceResetTime = utils.now()
 			@status =
 				sessions: null
 				goxlag: null
@@ -21,6 +22,7 @@ module.exports = (app) ->
 		setSource: () =>
 			if @source
 				@source.close()
+			@sourceResetTime = utils.now()
 			@lastUpdate = utils.now()
 			url = 'http://bitcoinity.org/ev/markets/markets_btcchina_CNY'
 			console.log 'New BTC China event source ' + url
@@ -34,7 +36,7 @@ module.exports = (app) ->
 				devices = null
 				if @cfg.alerts then devices = '*'
 				addNotification 'btcchina', 'Bitcoinity event source failure', 227, 38, 54, devices
-				setTimeout (() => @setSource()), 2000
+				setTimeout (() => @setSource()), (@cfg.allowedDowntime / 3) * 1000
 
 		receiveMessage: (data) =>
 			@lastUpdate = utils.now()
@@ -79,7 +81,7 @@ module.exports = (app) ->
 
 		check: () =>
 			elapsed = utils.now() - @lastTick
-			if elapsed > @cfg.allowedDowntime and not @status.consideredDown
+			if elapsed > @cfg.allowedDowntime * 2 and not @status.consideredDown
 				@status.consideredDown = yes
 				devices = null
 				if @cfg.emergencyAlerts
@@ -87,6 +89,8 @@ module.exports = (app) ->
 				else if @cfg.alerts
 					devices = '*'
 				addNotification 'btcchina', 'No tick from Bitcoinity for more than ' + Math.round(elapsed / 60) + 'm', 227, 38, 54, devices
+				@setSource()
+			else if elapsed > @cfg.allowedDowntime and (utils.now() - @sourceResetTime) > (@cfg.allowedDowntime / 2)
 				@setSource()
 			@checkLater()
 
