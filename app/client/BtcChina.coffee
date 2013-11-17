@@ -70,12 +70,14 @@ class BtcChina
 					line4.append cell
 					line4.append $('<td>').text window.hq.utils.ageToString status.timeSinceLastUpdate
 					line5 = $('<tr>').css('font-weight', 'bold')
-					line5.append $('<td>')
+					line5.append $('<td>').text 'links'
 					line5.append $('<td>').text 'trailing-stop limit'
 					line5.append $('<td>').attr('title', 'number of Bitcoinity sessions').text 'sessions'
 					line5.append $('<td>').text 'Mt.Gox lag'
 					line6 = $('<tr>')
-					line6.append $('<td>')
+					bitcoinity = $('<a>').attr('title', 'Bitcoinity').attr('href', 'http://bitcoinity.org/markets').attr('target', '_blank').append $('<img>').attr('src', window.hq.config.rootPath + 'img/bitcoinity.png')
+					bitcoinWisdom = $('<a>').attr('title', 'BitcoinWisdom').attr('href', 'http://bitcoinwisdom.com/').attr('target', '_blank').append $('<img>').attr('src', window.hq.config.rootPath + 'img/bitcoinwisdom.png')
+					line6.append $('<td>').append(bitcoinity).append(' ').append bitcoinWisdom
 					if status.price
 						line6.append $('<td>').text window.hq.utils.round(status.highestPrice - status.trailingStop, 2)
 					else
