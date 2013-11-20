@@ -67,8 +67,10 @@ module.exports = (app) ->
 					alert = 'Trailing stop hit at 75%'
 				else if prevPrice > stop50 and newPrice <= stop50
 					alert = 'Trailing stop hit at 50%'
+					alert = null # disabled
 				else if prevPrice > stop25 and newPrice <= stop25
 					alert = 'Trailing stop hit at 25%'
+					alert = null # disabled
 				if alert
 					alert += ' (from ' + utils.round(prevPrice, 2) + ' to ' + utils.round(newPrice, 2) + ' RMB)'
 					addNotification 'btcchina', alert, 227, 38, 54, alertType

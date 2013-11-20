@@ -11,7 +11,7 @@ window.hq =
 		futureTransactions:
 			tags: ['atm', 'supermarket', 'restaurant', 'fastfood', 'club',
 				'bar', 'pharmacy', 'transport', 'doctor', 'rent', 'utilities',
-				'domain', 'tech', 'bitcoin', 'haircut', 'other']
+				'domain', 'tech', 'bitcoin', 'haircut', 'clothes', 'other']
 
 		btcChina:
 			yuanToEuro: 0.122982772
