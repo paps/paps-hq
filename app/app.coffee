@@ -47,12 +47,13 @@ app.use express.urlencoded()
 app.use express.methodOverride()
 app.use express.cookieParser()
 app.use express.session
-	secret: config.secret
+	secret: config.sessionSecret
 	store: new SessionStore
+		maxAge: config.sessionDuration * 60 * 60
 	cookie:
 		path: '/'
 		httpOnly: yes
-		maxAge: 1000 * 60 * 60 * config.sessionDuration
+		maxAge: 1000 * 60 * 60 * config.cookieDuration
 		secure: config.secureCookie
 app.use passport.initialize()
 app.use passport.session()

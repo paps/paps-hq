@@ -4,6 +4,18 @@ module.exports = (db) ->
 
 	class SessionStore extends require('express').session.Store
 		constructor: (options) ->
+			@maxAge = options.maxAge
+			@purge()
+
+		purge: () =>
+			db.query 'DELETE FROM sessions WHERE date < ?',
+				[utils.now() - @maxAge], (err) =>
+					if err
+						console.log 'When purging sessions: ' + err.toString()
+					@purgeLater()
+
+		purgeLater: () =>
+			setTimeout (() => @purge()), 6 * 60 * 60 * 1000 # 6 hours
 
 		get: (sid, done) ->
 			db.query 'SELECT data FROM sessions WHERE id = ?',
